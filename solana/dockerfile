@@ -1,0 +1,41 @@
+FROM ubuntu:20.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    pkg-config \
+    libudev-dev llvm libclang-dev \
+    protobuf-compiler libssl-dev curl
+
+# rust
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+# solana-cli
+RUN sh -c "$(curl -sSfL https://release.anza.xyz/v1.18.23/install)"
+ENV PATH="$HOME/.local/share/solana/install/active_release/bin:${PATH}"
+
+
+
+# anchor-cli
+RUN cargo install --git https://github.com/coral-xyz/anchor --tag v0.31.1 anchor-cli
+
+# npm + yarn
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
+    npm install --global yarn
+
+WORKDIR /solana
+
+COPY . /solana
+
+RUN rustup target add wasm32-unknown-unknown
+
+#RUN cargo install cargo-watch
+
+#RUN cargo install build-sbf --git https://github.com/solana-labs/solana --bin build-sbf
+
+CMD ["anchor", "build"]
+
+EXPOSE 8899
