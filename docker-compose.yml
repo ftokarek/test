@@ -19,8 +19,12 @@ services:
   frontend:
     build:
       context: ./frontend
+      dockerfile: Dockerfile
+      target: development
     volumes:
       - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
     container_name: react-frontend
     ports:
       - "3000:3000"
@@ -28,7 +32,25 @@ services:
       - backend
     networks:
       - app-network
-    command: npm run dev
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_BACKEND_URL=http://backend:8000
+
+  # Alias dla wykonywania lintera
+  frontend-lint:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: development
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    profiles:
+      - lint
+    container_name: react-frontend-lint
+    command: npm run lint
+    networks:
+      - app-network
 
   # solana:
   #   build:
