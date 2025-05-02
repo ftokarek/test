@@ -13,7 +13,7 @@ class Product(BaseModel):
     description: Optional[str] = None
     opinion: Optional[Opinion_P] = None
 
-class SellerBase(BaseModel):
+class ProductBase(BaseModel):
     name: str
     description: Optional[str] = None
 
