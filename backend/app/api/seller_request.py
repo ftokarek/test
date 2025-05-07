@@ -1,0 +1,33 @@
+from fastapi import APIRouter, HTTPException
+from typing import List
+from app.models.seller_model import Seller, SellerCreate
+from app.db.get_seller_info import (
+    create_seller_in_db,
+    list_sellers_from_db,
+    get_seller_from_db,
+)
+
+router = APIRouter()
+
+@router.post("/sellers/", response_model=Seller)
+async def create_seller(seller_data: SellerCreate):
+    seller_dict = {
+        "name": seller_data.name,
+        "description": seller_data.description,
+        "products": seller_data.products,
+        "opinions": seller_data.opinions,
+    }
+    seller = await create_seller_in_db(seller_dict)
+    return seller
+
+@router.get("/sellers/", response_model=List[Seller])
+async def list_sellers():
+    sellers = await list_sellers_from_db()
+    return sellers
+
+@router.get("/sellers/{seller_id}", response_model=Seller)
+async def get_seller(seller_id: str):
+    seller = await get_seller_from_db(seller_id)
+    if not seller:
+        raise HTTPException(status_code=404, detail="Seller not found")
+    return seller
