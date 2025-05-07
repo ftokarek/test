@@ -1,0 +1,81 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environment folders
+venv/
+.venv/
+
+# Environment variables
+.env
+.env.*
+
+# Logs
+*.log
+
+# SQLite database files
+*.sqlite3
+*.db
+
+# VS Code settings
+.vscode/
+
+# macOS system files
+.DS_Store
+
+# Docker-related files (ignore only generated clutter, not configs)
+*.pid
+
+# Uvicorn specific
+*.reload
+
+# Other system files
+Thumbs.db
+
+# AI API keys or credentials
+*.key
+*.pem
+*.crt
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Temporary Python files
+*.~*
+
+# SQL dump files
+*.sql
+*.dump
+
+# Cache and temporary files
+*.cache
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Python egg files
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Pytest cache
+.pytest_cache/
+
+# Coverage reports
+htmlcov/
+.coverage
+*.cover
+*.coverage.*
+
+# MyPy type checker cache
+.mypy_cache/
+
+# Bandit security tool reports
+.bandit
+
+# Profiling data
+*.prof
