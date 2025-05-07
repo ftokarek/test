@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from models import Prompt, PromptCreate
+from prompt_model import Prompt, PromptCreate
 from typing import List
 
 app = FastAPI()
