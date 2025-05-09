@@ -1,11 +1,13 @@
 from fastapi import FastAPI
 from app.api import prompt_request
 from app.api import seller_request
+from app.api import conversation_request
 
 app = FastAPI()
 
 app.include_router(seller_request.router)
 app.include_router(prompt_request.router)
+app.include_router(conversation_request.router)
 
 @app.get("/")
 async def root():
