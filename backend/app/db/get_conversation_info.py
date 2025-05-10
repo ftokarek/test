@@ -1,4 +1,5 @@
 from motor import AsyncIOMotorClient
+from app.models.conversation_model import Conversation
 from bson import ObjectId
 import asyncio
 import os
@@ -20,7 +21,27 @@ except Exception as e:
 async def create_conversation_in_db(conversation_data: dict):
     result = await conversation_collection.insert_one(conversation_data)
     created_conversation = await conversation_collection.find_one({"_id": result.inserted_id})
-    return created_conversation
+    return Conversation(
+        id=str(created_conversation["_id"]),
+        user_id=created_conversation["user_id"],
+        chosen_model=created_conversation["chosen_model"],
+        chosen_prompts=created_conversation["chosen_prompts"],
+        parameters=created_conversation["parameters"],
+        messages=created_conversation["messages"],
+    )
+
+#async def list_conversations_from_db(user_id: str):
+#    conversations = []
+#    async for conversation in conversation_collection.find({"user_id": user_id}):
+#        conversations.append(Conversation(
+#            id=str(conversation["_id"]),
+#            user_id=conversation["user_id"],
+#            chosen_model=conversation["chosen_model"],
+#            chosen_prompts=conversation["chosen_prompts"],
+#            parameters=conversation["parameters"],
+#            messages=conversation["messages"],
+#        ))
+#    return conversations
 
 async def get_conversation_info(conversation_id: str):
     if not ObjectId.is_valid(conversation_id):
