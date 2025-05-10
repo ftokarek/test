@@ -1,5 +1,3 @@
-# conversation_request.py
-
 from fastapi import APIRouter, HTTPException
 from typing import List
 from bson import ObjectId
