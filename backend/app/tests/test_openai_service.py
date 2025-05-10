@@ -1,7 +1,8 @@
 import sys
 import os
 
-# Dodaj folder backend do ścieżki modułów
+# adding backend folder to modules
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 
 from app.services.openai_service import test_openai_connection

@@ -24,7 +24,6 @@ def test_login_with_email():
     result = authenticate_user(login_data)
     print("Login with email:", result)
 
-# Test login with username
 def test_login_with_username():
     login_data = UserLogin(identifier="uzytkownik", password="haslohaslo")
     result = authenticate_user(login_data)
@@ -38,7 +37,7 @@ def test_invalid_login():
     except Exception as e:
         print("Invalid login:", e)
 
-# Run tests
+#run tests
 if __name__ == "__main__":
     test_login_with_email()
     test_login_with_username()

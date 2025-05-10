@@ -37,6 +37,7 @@ def parse_response(response):
     except (KeyError, IndexError) as e:
         raise ValueError(f"Failed to parse OpenAI response: {e}")
 
+#sent to gemini - use only when openai fails
 def send_to_gemini(prompt: str):
     """
     Send the prompt to Gemini API using Google GenAI as a fallback.
@@ -51,7 +52,7 @@ def send_to_gemini(prompt: str):
             contents=prompt
         )
         
-        # Return the generated text
+        #return response..
         return response.text.strip()
     except Exception as e:
         return f"Failed to connect to Gemini API: {e}"
