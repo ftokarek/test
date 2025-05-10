@@ -1,4 +1,4 @@
-from bson import ObjectId  # Correct import from bson
+from bson import ObjectId  
 from app.models.user_model import UserCreate, UserLogin, UserOut, PyObjectId
 
 # Test UserCreate model
@@ -14,8 +14,8 @@ def test_user_create():
 # Test UserLogin model
 def test_user_login():
     login_data = {
-        "identifier": "uzytkownik@mail.com",  # Updated to use 'identifier' field
-        "password": "haslohaslo"  # Updated to match the UserCreate password
+        "identifier": "uzytkownik@mail.com",  
+        "password": "haslohaslo"  
     }
     login = UserLogin(**login_data)
     print("UserLogin model works:", login)
@@ -30,7 +30,7 @@ def test_user_out():
     user_out = UserOut(**user_out_data)
     print("UserOut model works:", user_out)
 
-# Run tests
+#run tests
 if __name__ == "__main__":
     test_user_create()
     test_user_login()
