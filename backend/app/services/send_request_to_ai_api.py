@@ -34,6 +34,9 @@ async def send_request_to_ai_api(
     except Exception as e:
         raise Exception(f"Unexpected error: {str(e)}")
 
+
+## Zostawić aż podłączy się API
+
 ## to rebuild, to discuss with the team
 def build_payload(api_endpoint: str, model_info: Dict[str, Any], full_prompt: str) -> Dict[str, Any]:
 

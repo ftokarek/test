@@ -16,8 +16,17 @@ async def process_prompt_request(prompt_ids: list, model_id: str, user_message: 
         raise HTTPException(status_code=404, detail=f"Model ID {model_id} not found!")
     
     response = await send_request_to_ai_api(
-        prompts_data=prompts_data,
-        model_info=model_info,
-        user_message=user_message
-    )
+        prompts_data = prompts_data,
+        model_info = model_info,
+        user_message = user_message
+        )
+    ##############################
+    # Save the response to MongoDB (uncomment when ready)
+    #await save_response_to_mongodb({
+    #        "prompt_ids": prompt_ids,
+    #        "model_id": model_id,
+    #        "user_message": user_message,
+    #        "response": response
+    #    })
+    #)
     return response
