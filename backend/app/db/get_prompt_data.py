@@ -6,12 +6,12 @@ from typing import Dict, Any, Optional
 from app.models.prompt_model import PromptModel
 
 load_dotenv()
-MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
-DATABASE_NAME = os.getenv("MONGO_DB_NAME", "ai_models_db")
+MONGO_URI = os.getenv("MONGO_URI")
+MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
 
 try:
     client = AsyncIOMotorClient(MONGO_URI)
-    db = client[DATABASE_NAME]
+    db = client[MONGO_DB_NAME]
 except Exception as e:
     raise RuntimeError(f"Failed to connect to MongoDB: {e}")
 
