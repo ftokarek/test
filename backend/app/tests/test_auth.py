@@ -15,7 +15,7 @@ def mock_find_one(query):
     return None
 
 # Replace the database query function with the mock
-from NeuroSphere.backend.app.auth.auth import users_collection
+from app.auth.auth import users_collection
 users_collection.find_one = mock_find_one
 
 # Test login with email
