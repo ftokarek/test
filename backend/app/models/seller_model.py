@@ -14,12 +14,13 @@ class SellerBase(BaseModel):
 class SellerCreate(SellerBase):
     products: List[Product] = []
     opinions: List[Opinion_S] = []
+    public_key: str
 
 class Seller(SellerBase):
     id: int
     products: List[Product] = []
     opinions: List[Opinion_S] = []
-
+    public_key: str
 
 
 #from fastapi import FastAPI, HTTPException

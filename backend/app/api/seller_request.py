@@ -16,6 +16,7 @@ async def create_seller(seller_data: SellerCreate):
         "description": seller_data.description,
         "products": seller_data.products,
         "opinions": seller_data.opinions,
+        "public_key": seller_data.public_key,
     }
     seller = await create_seller_in_db(seller_dict)
     return seller
@@ -31,3 +32,10 @@ async def get_seller(seller_id: str):
     if not seller:
         raise HTTPException(status_code=404, detail="Seller not found")
     return seller
+
+@router.get("/seller_public_key/{seller_id}", response_model=str)
+async def get_seller_public_key(seller_id: str):
+    public_key = await get_seller_public_key(seller_id)
+    if not public_key:
+        raise HTTPException(status_code=404, detail="Seller not found")
+    return public_key
