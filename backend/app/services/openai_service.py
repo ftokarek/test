@@ -2,6 +2,7 @@ import os
 import openai
 from dotenv import load_dotenv
 from google import genai  
+from user_conversation_message_adder import add_message_to_conversation
 
 # Load environment variables
 load_dotenv()
@@ -33,7 +34,7 @@ def parse_response(response):
     Parse the response from the OpenAI API.
     """
     try:
-        return response["choices"][0]["message"]["content"].strip()
+        return response["choices"][0]["message"]["content"].strip() #######!!
     except (KeyError, IndexError) as e:
         raise ValueError(f"Failed to parse OpenAI response: {e}")
 
@@ -51,7 +52,10 @@ def send_to_gemini(prompt: str):
             model="gemini-2.0-flash",
             contents=prompt
         )
-        
+        #user_id = "user_id"  # Replace with actual user ID when possi'bl
+        add_message_to_conversation("user_id", prompt, "user")
+        add_message_to_conversation("user_id", response, "model") 
+        ###### wpis do bazy danych responsa jako message
         #return response..
         return response.text.strip()
     except Exception as e:
