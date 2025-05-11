@@ -30,9 +30,9 @@ async def create_conversation_in_db(conversation_data: dict) -> Conversation:
             user_id=created_conversation["user_id"],
             chosen_model=created_conversation["chosen_model"],
             chosen_prompts=created_conversation["chosen_prompts"],
-            conversation_title=created_conversation["conversation_title"],
+            conversation_title=created_conversation["conversation_title"], #do stworzenia
             parameters=created_conversation["parameters"],
-            messages=created_conversation["messages"],
+            messages=str([]),
         )
     except Exception as e:
         raise RuntimeError(f"Error while creating conversation: {e}")
@@ -40,9 +40,6 @@ async def create_conversation_in_db(conversation_data: dict) -> Conversation:
 
 async def get_conversation_info(user_id: str):
     try:
-        if not ObjectId.is_valid(user_id):
-            raise ValueError("Invalid user ID format")
-        
         conversation = await conversation_collection.find_one({"_id": ObjectId(user_id)})
         if not conversation:
             raise ValueError("Conversation not found")
