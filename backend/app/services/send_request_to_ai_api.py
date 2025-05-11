@@ -34,9 +34,6 @@ async def send_request_to_ai_api(
     except Exception as e:
         raise Exception(f"Unexpected error: {str(e)}")
 
-
-## Zostawić aż podłączy się API
-
 ## to rebuild, to discuss with the team
 def build_payload(api_endpoint: str, model_info: Dict[str, Any], full_prompt: str) -> Dict[str, Any]:
 
@@ -47,6 +44,16 @@ def build_payload(api_endpoint: str, model_info: Dict[str, Any], full_prompt: st
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": full_prompt}
             ],
+            **model_info.get("parameters", {})
+        }
+    elif "gemini" in api_endpoint.lower():
+        return {
+            "model": model_info.get("name", "gemini-2.0-flash"),
+            "messages": [
+                {"role": "system", "content": "Jesteś największym władcą."},
+                {"role": "user", "content": full_prompt}
+            ],
+            #"contents": full_prompt,
             **model_info.get("parameters", {})
         }
     else:
