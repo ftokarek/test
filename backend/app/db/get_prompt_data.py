@@ -17,7 +17,7 @@ except Exception as e:
 
 async def get_prompt_data(prompt_id: str) -> Optional[Dict[str, Any]]:
     try:
-        collection = db["prompts"]
+        collection = db["products"]
         
         query = {"_id": ObjectId(prompt_id)} if ObjectId.is_valid(prompt_id) else {"_id": prompt_id}
         
@@ -27,8 +27,7 @@ async def get_prompt_data(prompt_id: str) -> Optional[Dict[str, Any]]:
 
         return PromptModel(
             id=str(prompt_data["_id"]),
-            text=prompt_data.get("text", ""),
-            metadata=prompt_data.get("metadata", {})
+            text=prompt_data.get("prompt_text", ""),
         )
 
     except Exception as e:
