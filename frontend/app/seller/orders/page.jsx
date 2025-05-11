@@ -1,24 +1,36 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { assets, orderDummyData } from "@/assets/assets";
-import Image from "next/image";
-import { useAppContext } from "@/context/AppContext";
-import Footer from "@/components/seller/Footer";
-import Loading from "@/components/Loading";
-
+'use client';
+import React, { useEffect, useState } from 'react';
+import { assets } from '@/assets/assets';
+import Image from 'next/image';
+import { useAppContext } from '@/context/AppContext';
+import Footer from '@/components/seller/Footer';
+import Loading from '@/components/Loading';
+import axios from 'axios';
 const Orders = () => {
-  const { currency } = useAppContext();
+  const { currency, getToken } = useAppContext();
 
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchSellerOrders = async () => {
-    setOrders(orderDummyData);
+    try {
+      const token = await getToken();
+      const { data } = await axios.get('/api/order/seller-orders', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(data);
+      setOrders(data.orders);
+    } catch (error) {
+      console.log(error);
+    }
     setLoading(false);
   };
 
   useEffect(() => {
     fetchSellerOrders();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -44,9 +56,9 @@ const Orders = () => {
                     <span className="font-medium">
                       {order.items
                         .map(
-                          (item) => item.product.name + ` x ${item.quantity}`,
+                          (item) => item.product.name + ` x ${item.quantity}`
                         )
-                        .join(", ")}
+                        .join(', ')}
                     </span>
                     <span>Items : {order.items.length}</span>
                   </p>

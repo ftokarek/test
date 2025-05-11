@@ -1,12 +1,11 @@
-import React from "react";
-import Image from "next/image";
-
+import React from 'react';
+import Link from 'next/link';
 const Footer = () => {
   return (
     <footer className="bg-background text-white">
       <div className="flex flex-col md:flex-row items-start justify-center px-6 md:px-16 lg:px-32 gap-10 py-14 border-b border-gray-700 text-gray-300">
         <div className="w-4/5">
-          <div className="font-bold text-2xl tracking-wider">NeuroSphere</div>
+          <div className="font-bold text-2xl">NeuroSphere</div>
           <p className="mt-6 text-sm">
             The first decentralized marketplace for AI prompts and models built
             on the Solana blockchain. We connect creators, investors, and users,
@@ -20,27 +19,30 @@ const Footer = () => {
             <h2 className="font-medium text-white mb-5">Platform</h2>
             <ul className="text-sm space-y-2">
               <li>
-                <a className="hover:text-blue-300 transition" href="/">
+                <Link className="hover:text-blue-300 transition" href="/">
                   Home
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   className="hover:text-blue-300 transition"
                   href="/all-products"
                 >
                   Marketplace
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-blue-300 transition" href="/pricing">
+                <Link
+                  className="hover:text-blue-300 transition"
+                  href="/pricing"
+                >
                   Pricing
-                </a>
+                </Link>
               </li>
               <li>
-                <a className="hover:text-blue-300 transition" href="/docs">
+                <Link className="hover:text-blue-300 transition" href="/docs">
                   Documentation
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -52,7 +54,7 @@ const Footer = () => {
             <div className="text-sm space-y-2">
               <p>support@neurosphere.ai</p>
               <div className="flex space-x-4 mt-3">
-                <a
+                <Link
                   href="https://facebook.com/neurosphere"
                   className="hover:text-blue-300"
                   aria-label="Facebook"
@@ -69,8 +71,8 @@ const Footer = () => {
                       clipRule="evenodd"
                     />
                   </svg>
-                </a>
-                <a
+                </Link>
+                <Link
                   href="https://twitter.com/neurosphere"
                   className="hover:text-blue-300"
                   aria-label="Twitter"
@@ -83,8 +85,8 @@ const Footer = () => {
                   >
                     <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
                   </svg>
-                </a>
-                <a
+                </Link>
+                <Link
                   href="https://github.com/neurosphere"
                   className="hover:text-blue-300"
                   aria-label="GitHub"
@@ -101,14 +103,14 @@ const Footer = () => {
                       clipRule="evenodd"
                     />
                   </svg>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
         </div>
       </div>
       <p className="py-4 text-center text-xs md:text-sm text-gray-400">
-        © 2023 NeuroSphere. All rights reserved.
+        © 2025 NeuroSphere. All rights reserved.
       </p>
     </footer>
   );

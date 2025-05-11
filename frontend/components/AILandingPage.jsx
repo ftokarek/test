@@ -1,9 +1,8 @@
-"use client";
-import React from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { assets } from "@/assets/assets";
-import GridBackground from "./GridBackground";
+'use client';
+import React from 'react';
+import Image from 'next/image';
+import { assets } from '@/assets/assets';
+import GridBackground from './GridBackground';
 const AILandingPage = () => {
   return (
     <div className="relative w-full h-screen overflow-hidden bg-background">

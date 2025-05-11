@@ -1,25 +1,45 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import { assets, productsDummyData } from "@/assets/assets";
-import Image from "next/image";
-import { useAppContext } from "@/context/AppContext";
-import Footer from "@/components/seller/Footer";
-import Loading from "@/components/Loading";
+'use client';
+import React, { useEffect, useState } from 'react';
+import { assets } from '@/assets/assets';
+import Image from 'next/image';
+import { useAppContext } from '@/context/AppContext';
+import Footer from '@/components/seller/Footer';
+import Loading from '@/components/Loading';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 const ProductList = () => {
-  const { router } = useAppContext();
+  const { router, getToken, user } = useAppContext();
 
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetchSellerProduct = async () => {
-    setProducts(productsDummyData);
-    setLoading(false);
+    try {
+      const token = await getToken();
+
+      const { data } = await axios.get('/api/product/seller-list', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (data.success) {
+        setProducts(data.products);
+        setLoading(false);
+      } else {
+        toast.error(data.message);
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
     fetchSellerProduct();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   return (
     <div className="flex-1 min-h-screen flex flex-col justify-between">
@@ -50,7 +70,7 @@ const ProductList = () => {
                     <td className="md:px-4 pl-2 md:pl-4 py-3 flex items-center space-x-3 truncate">
                       <div className="bg-gray-500/10 rounded p-2">
                         <Image
-                          src={product.image[0]}
+                          src={product.images[0]}
                           alt="product Image"
                           className="w-16"
                           width={1280}

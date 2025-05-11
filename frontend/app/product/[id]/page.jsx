@@ -1,13 +1,13 @@
-"use client";
-import { useEffect, useState } from "react";
-import { assets } from "@/assets/assets";
-import ProductCard from "@/components/ProductCard";
-import Layout from "@/components/Layout";
-import Image from "next/image";
-import { useParams } from "next/navigation";
-import Loading from "@/components/Loading";
-import { useAppContext } from "@/context/AppContext";
-import React from "react";
+'use client';
+import { useEffect, useState } from 'react';
+import { assets } from '@/assets/assets';
+import ProductCard from '@/components/ProductCard';
+import Layout from '@/components/Layout';
+import Image from 'next/image';
+import { useParams } from 'next/navigation';
+import Loading from '@/components/Loading';
+import { useAppContext } from '@/context/AppContext';
+import React from 'react';
 
 const Product = () => {
   const { id } = useParams();
@@ -22,6 +22,7 @@ const Product = () => {
 
   useEffect(() => {
     fetchProductData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, products.length]);
 
   return productData ? (
@@ -31,7 +32,7 @@ const Product = () => {
           <div className="px-5 lg:px-16 xl:px-20">
             <div className="rounded-xl overflow-hidden bg-gray-800/30 mb-4 border border-blue-500/20">
               <Image
-                src={mainImage || productData.image[0]}
+                src={mainImage || productData.images[0]}
                 alt={productData.name}
                 className="w-full h-auto object-contain p-4"
                 width={1280}
@@ -40,14 +41,14 @@ const Product = () => {
             </div>
 
             <div className="grid grid-cols-4 gap-4">
-              {productData.image.map((image, index) => (
+              {productData.images.map((image, index) => (
                 <div
                   key={index}
                   onClick={() => setMainImage(image)}
                   className={`cursor-pointer rounded-lg overflow-hidden bg-gray-800/30 border ${
                     mainImage === image || (!mainImage && index === 0)
-                      ? "border-blue-500"
-                      : "border-blue-500/20"
+                      ? 'border-blue-500'
+                      : 'border-blue-500/20'
                   } hover:border-blue-500 transition-colors`}
                 >
                   <Image
@@ -98,7 +99,7 @@ const Product = () => {
             </div>
             <p className="text-gray-300 mt-3">{productData.description}</p>
             <p className="text-3xl font-medium mt-6 text-white">
-              {productData.offerPrice}{" "}
+              {productData.offerPrice}{' '}
               <span className="text-blue-400">SOL</span>
               <span className="text-base font-normal text-gray-400 line-through ml-2">
                 {productData.price} SOL
@@ -138,7 +139,7 @@ const Product = () => {
               <button
                 onClick={() => {
                   addToCart(productData._id);
-                  router.push("/cart");
+                  router.push('/cart');
                 }}
                 className="w-full py-3.5 bg-blue-600 text-white hover:bg-blue-700 transition rounded-lg"
               >

@@ -1,31 +1,31 @@
-import React, { useState, useEffect } from "react";
-import { assets } from "@/assets/assets";
-import Image from "next/image";
+import React, { useState, useEffect } from 'react';
+import { assets } from '@/assets/assets';
+import Image from 'next/image';
 
 const HeaderSlider = () => {
   const sliderData = [
     {
       id: 1,
-      title: "Discover the Future of AI - Collect and Trade AI Models",
-      offer: "Limited Offer - 30% Discount for New Users",
-      buttonText1: "Buy Now",
-      buttonText2: "Learn More",
+      title: 'Discover the Future of AI - Collect and Trade AI Models',
+      offer: 'Limited Offer - 30% Discount for New Users',
+      buttonText1: 'Buy Now',
+      buttonText2: 'Learn More',
       imgSrc: assets.ai_cosmonaut,
     },
     {
       id: 2,
-      title: "Create, Share, Earn - Sell Your Prompts on NeuroSphere",
-      offer: "Exclusive AI Creator Community!",
-      buttonText1: "Join Now",
-      buttonText2: "See Benefits",
+      title: 'Create, Share, Earn - Sell Your Prompts on NeuroSphere',
+      offer: 'Exclusive AI Creator Community!',
+      buttonText1: 'Join Now',
+      buttonText2: 'See Benefits',
       imgSrc: assets.ai_cosmonaut,
     },
     {
       id: 3,
-      title: "Secure AI Asset Trading - Powered by Solana Blockchain",
-      offer: "Zero transaction fees for the first month",
-      buttonText1: "Get Started",
-      buttonText2: "How It Works",
+      title: 'Secure AI Asset Trading - Powered by Solana Blockchain',
+      offer: 'Zero transaction fees for the first month',
+      buttonText1: 'Get Started',
+      buttonText2: 'How It Works',
       imgSrc: assets.ai_cosmonaut,
     },
   ];
@@ -96,7 +96,7 @@ const HeaderSlider = () => {
             key={index}
             onClick={() => handleSlideChange(index)}
             className={`h-2 w-2 rounded-full cursor-pointer ${
-              currentSlide === index ? "bg-blue-500" : "bg-gray-500/30"
+              currentSlide === index ? 'bg-blue-500' : 'bg-gray-500/30'
             }`}
           ></div>
         ))}

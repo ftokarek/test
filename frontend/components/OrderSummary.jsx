@@ -1,16 +1,42 @@
-import { addressDummyData } from "@/assets/assets";
-import { useAppContext } from "@/context/AppContext";
-import React, { useEffect, useState } from "react";
+import { useAppContext } from '@/context/AppContext';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { toast } from 'react-hot-toast';
 
 const OrderSummary = () => {
-  const { currency, router, getCartCount, getCartAmount } = useAppContext();
+  const {
+    router,
+    getCartCount,
+    getCartAmount,
+    getToken,
+    user,
+    cartItems,
+    setCartItems,
+  } = useAppContext();
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const [userAddresses, setUserAddresses] = useState([]);
 
   const fetchUserAddresses = async () => {
-    setUserAddresses(addressDummyData);
+    try {
+      const token = await getToken();
+      const { data } = await axios.get('/api/user/get-address', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (data.success) {
+        setUserAddresses(data.addresses);
+        if (data.addresses.length > 0) {
+          setSelectedAddress(data.addresses[0]);
+        }
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
 
   const handleAddressSelect = (address) => {
@@ -18,11 +44,54 @@ const OrderSummary = () => {
     setIsDropdownOpen(false);
   };
 
-  const createOrder = async () => {};
+  const createOrder = async () => {
+    try {
+      if (!selectedAddress) {
+        return toast.error('Please select an address');
+      }
+      let cartItemsArray = Object.keys(cartItems).map((key) => {
+        return {
+          product: key,
+          quantity: cartItems[key],
+        };
+      });
+      cartItemsArray = cartItemsArray.filter((item) => item.quantity > 0);
+
+      if (cartItemsArray.length === 0) {
+        return toast.error('Cart is empty');
+      }
+
+      const token = await getToken();
+      const { data } = await axios.post(
+        '/api/order/create',
+        {
+          address: selectedAddress._id,
+          items: cartItemsArray,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (data.success) {
+        toast.success(data.message);
+        setCartItems({});
+        router.push('/order-placed');
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
 
   useEffect(() => {
-    fetchUserAddresses();
-  }, []);
+    if (user) {
+      fetchUserAddresses();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   return (
     <div className="w-full md:w-96 bg-gray-900/40 p-6 rounded-xl border border-blue-500/20 backdrop-blur-sm">
@@ -35,18 +104,18 @@ const OrderSummary = () => {
           <label className="text-base font-medium uppercase text-gray-300 block mb-2">
             Select Address
           </label>
-          <div className="relative inline-block w-full text-sm border border-gray-700 rounded-lg overflow-hidden">
+          <div className="relative inline-block w-full text-sm rounded-lg overflow-hidden">
             <button
-              className="peer w-full text-left px-4 pr-2 py-3 bg-gray-800 text-gray-300 focus:outline-none"
+              className="rounded-lg w-full text-left px-4 pr-2 py-3 bg-gray-800 text-gray-300 focus:outline-none"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             >
               <span>
                 {selectedAddress
                   ? `${selectedAddress.fullName}, ${selectedAddress.area}, ${selectedAddress.city}, ${selectedAddress.state}`
-                  : "Select delivery address"}
+                  : 'Select delivery address'}
               </span>
               <svg
-                className={`w-5 h-5 inline float-right transition-transform duration-200 ${isDropdownOpen ? "rotate-0" : "-rotate-90"}`}
+                className={`w-5 h-5 inline float-right transition-transform duration-200 ${isDropdownOpen ? 'rotate-0' : '-rotate-90'}`}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -62,19 +131,19 @@ const OrderSummary = () => {
             </button>
 
             {isDropdownOpen && (
-              <ul className="absolute w-full bg-gray-800 border border-gray-700 shadow-xl mt-1 z-10 py-1.5 rounded-lg">
+              <ul className="w-full bg-gray-800 border border-gray-700 shadow-xl mt-1 z-10 py-1.5 rounded-lg divide-y divide-gray-700">
                 {userAddresses.map((address, index) => (
                   <li
                     key={index}
-                    className="px-4 py-2 hover:bg-gray-700 cursor-pointer text-gray-300"
+                    className="px-4 py-2 hover:bg-gray-700 cursor-pointer text-gray-300 "
                     onClick={() => handleAddressSelect(address)}
                   >
-                    {address.fullName}, {address.area}, {address.city},{" "}
+                    {address.fullName}, {address.area}, {address.city},{' '}
                     {address.state}
                   </li>
                 ))}
                 <li
-                  onClick={() => router.push("/add-address")}
+                  onClick={() => router.push('/add-address')}
                   className="px-4 py-2 hover:bg-blue-900/30 cursor-pointer text-center text-blue-400"
                 >
                   + Add New Address
@@ -123,7 +192,7 @@ const OrderSummary = () => {
               {(
                 getCartAmount() +
                 Math.floor(getCartAmount() * 0.02 * 100) / 100
-              ).toFixed(2)}{" "}
+              ).toFixed(2)}{' '}
               SOL
             </p>
           </div>

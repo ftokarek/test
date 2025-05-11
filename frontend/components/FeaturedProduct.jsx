@@ -1,10 +1,8 @@
-import React from "react";
-import { assets } from "@/assets/assets";
-import Image from "next/image";
-import { useAppContext } from "@/context/AppContext";
+import React from 'react';
+// import { useAppContext } from '@/context/AppContext';
 
 const FeaturedProduct = () => {
-  const { products } = useAppContext();
+  // const { products } = useAppContext();
 
   return (
     <div className="py-16">
@@ -88,7 +86,7 @@ const FeaturedProduct = () => {
             <p className="text-gray-300 text-sm mb-4">
               Configurable prompt for generating marketing content. Creates blog
               articles, social media posts, and newsletters tailored to a
-              brand's voice and tone.
+              brand&apos;s voice and tone.
             </p>
             <div className="flex justify-between items-center">
               <div>

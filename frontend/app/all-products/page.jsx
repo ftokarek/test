@@ -1,7 +1,7 @@
-"use client";
-import ProductCard from "@/components/ProductCard";
-import Layout from "@/components/Layout";
-import { useAppContext } from "@/context/AppContext";
+'use client';
+import ProductCard from '@/components/ProductCard';
+import Layout from '@/components/Layout';
+import { useAppContext } from '@/context/AppContext';
 
 const AllProducts = () => {
   const { products } = useAppContext();

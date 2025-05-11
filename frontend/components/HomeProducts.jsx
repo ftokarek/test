@@ -1,38 +1,38 @@
-import React from "react";
+import React from 'react';
 
 const HomeProducts = () => {
   const categories = [
     {
       id: 1,
-      name: "GPT Models",
-      desc: "Fine-tuned language models",
+      name: 'GPT Models',
+      desc: 'Fine-tuned language models',
       count: 156,
-      icon: "🧠",
-      color: "bg-blue-500",
+      icon: '🧠',
+      color: 'bg-blue-500',
     },
     {
       id: 2,
-      name: "Prompts",
-      desc: "Advanced AI instructions",
+      name: 'Prompts',
+      desc: 'Advanced AI instructions',
       count: 423,
-      icon: "📝",
-      color: "bg-purple-500",
+      icon: '📝',
+      color: 'bg-purple-500',
     },
     {
       id: 3,
-      name: "Chatbots",
-      desc: "Configurable AI assistants",
+      name: 'Chatbots',
+      desc: 'Configurable AI assistants',
       count: 82,
-      icon: "💬",
-      color: "bg-green-500",
+      icon: '💬',
+      color: 'bg-green-500',
     },
     {
       id: 4,
-      name: "Data Analysis",
-      desc: "Models for working with data",
+      name: 'Data Analysis',
+      desc: 'Models for working with data',
       count: 64,
-      icon: "📊",
-      color: "bg-amber-500",
+      icon: '📊',
+      color: 'bg-amber-500',
     },
   ];
 
