@@ -1,5 +1,12 @@
 from typing import Dict, List, Any
+
+from app.services.openai_service import build_payload, parse_response
+
+from app.services.user_conversation_message_adder import add_message_to_conversation
+
+
 from app.services.openai_service import send_to_openai, send_to_gemini, send_to_hugging_face
+
 
 async def send_request_to_ai_api(
     prompts_data: List[Dict[str, Any]],
@@ -7,7 +14,6 @@ async def send_request_to_ai_api(
     user_message: str,
     user_id: str,
     conversation_id: str,
- # Dodano parametr api_choice
 ) -> Dict[str, Any]:
     try:
 
