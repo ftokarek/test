@@ -75,7 +75,7 @@ def send_to_gemini(prompt: str):
         
         #return response..
         #user_id = "user_id"  # Replace with actual user ID when possi'bl
-        add_message_to_conversation("user_id", response, "user")
+        add_message_to_conversation("user_id", response.text.strip(), "user")
 
         return response.text.strip()
     except Exception as e:
@@ -97,7 +97,7 @@ def send_to_hugging_face(prompt: str):
         response = requests.post(url, headers=headers, json=data)
         response.raise_for_status()  # Raise an error for HTTP codes 4xx/5xx
         #user_id = "user_id"  # Replace with actual user ID when possi'bl
-        add_message_to_conversation("user_id", response, "user")
+        add_message_to_conversation("user_id", response.json()[0]["generated_text"].strip(), "user")
 
         return response.json()[0]["generated_text"].strip()
     except Exception as e:
