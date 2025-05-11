@@ -1,7 +1,8 @@
 import os
 import openai
 from dotenv import load_dotenv
-from google import genai  
+from google import genai
+import requests  # Dodano do obsługi Hugging Face API
 
 # Load environment variables
 load_dotenv()
@@ -13,9 +14,13 @@ openai.api_key = OPENAI_API_KEY
 # Gemini API Key
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
+# Hugging Face API Key
+HUGGING_FACE_API_KEY = os.getenv("HUGGING_FACE_API_KEY")
+
 # Debugging: Print confirmation of loaded API keys
 print("\nLoaded OpenAI API Key\n")
 print("Loaded Gemini API Key\n")
+print("Loaded Hugging Face API Key\n")
 
 def build_payload(prompt: str, model: str = "gpt-3.5-turbo", max_tokens: int = 1000):
     """
@@ -37,10 +42,20 @@ def parse_response(response):
     except (KeyError, IndexError) as e:
         raise ValueError(f"Failed to parse OpenAI response: {e}")
 
-#sent to gemini - use only when openai fails
+def send_to_openai(prompt: str):
+    """
+    Send the prompt to OpenAI API.
+    """
+    try:
+        payload = build_payload(prompt)
+        response = openai.ChatCompletion.create(**payload)
+        return parse_response(response)
+    except Exception as e:
+        return f"Failed to connect to OpenAI API: {e}"
+
 def send_to_gemini(prompt: str):
     """
-    Send the prompt to Gemini API using Google GenAI as a fallback.
+    Send the prompt to Gemini API using Google GenAI.
     """
     try:
         # Initialize the GenAI client
@@ -52,22 +67,39 @@ def send_to_gemini(prompt: str):
             contents=prompt
         )
         
-        #return response..
+        # Return the generated text
         return response.text.strip()
     except Exception as e:
         return f"Failed to connect to Gemini API: {e}"
 
-def test_openai_connection():
+def send_to_hugging_face(prompt: str):
     """
-    Test the connection to OpenAI API by sending a simple request.
-    If OpenAI fails, fallback to Gemini API.
+    Send the prompt to Hugging Face API.
     """
-    prompt = "introduce yourself in 1 sentence as google gemini"
     try:
-        payload = build_payload(prompt)
-        response = openai.ChatCompletion.create(**payload)
-        return parse_response(response)
+        # Użyj poprawnego modelu z Hugging Face
+        url = "https://api-inference.huggingface.co/models/bigscience/bloom"  # Przykładowy model
+        headers = {"Authorization": f"Bearer {HUGGING_FACE_API_KEY}"}
+        data = {"inputs": prompt}
+        response = requests.post(url, headers=headers, json=data)
+        response.raise_for_status()  # Raise an error for HTTP codes 4xx/5xx
+        return response.json()[0]["generated_text"].strip()
     except Exception as e:
-        print(f"\nOpenAI API failed: {e}\n")
-        print("Falling back to Gemini API...\n")
-        return send_to_gemini(prompt)
+        return f"Failed to connect to Hugging Face API: {e}"
+
+def test_all_apis():
+    """
+    Test all APIs (OpenAI, Gemini, Hugging Face) with the same prompt and display their responses.
+    """
+    prompt = "Introduce yourself in 1 sentence as a language model."
+    print("\nTesting OpenAI API...\n")
+    openai_response = send_to_openai(prompt)
+    print(f"OpenAI Response: {openai_response}\n")
+
+    print("\nTesting Gemini API...\n")
+    gemini_response = send_to_gemini(prompt)
+    print(f"Gemini Response: {gemini_response}\n")
+
+    print("\nTesting Hugging Face API...\n")
+    hugging_face_response = send_to_hugging_face(prompt)
+    print(f"Hugging Face Response: {hugging_face_response}\n")
