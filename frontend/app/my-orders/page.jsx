@@ -96,6 +96,12 @@ const MyOrders = () => {
                       <span>Payment : Pending</span>
                     </p>
                   </div>
+                  <button
+                    onClick={() => console.log('płać synu')}
+                    className="bg-violet-500 text-white px-4 py-2 rounded-md"
+                  >
+                    Pay
+                  </button>
                 </div>
               ))}
             </div>

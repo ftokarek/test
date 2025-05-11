@@ -13,11 +13,14 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^6.18.5",
+    "@vercel/analytics": "^1.5.0",
     "axios": "^1.9.0",
+    "class-variance-authority": "^0.7.1",
     "cloudinary": "^2.6.1",
     "clsx": "^2.1.1",
     "dotenv": "^16.5.0",
     "inngest": "^3.35.1",
+    "lucide-react": "^0.509.0",
     "mongoose": "^8.14.1",
     "motion": "^12.9.4",
     "next": "^15.2.3",
@@ -25,7 +28,9 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.5.1",
-    "tailwind-merge": "^3.2.0"
+    "simplex-noise": "^4.0.3",
+    "tailwind-merge": "^3.2.0",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "eslint": "8.56.0",

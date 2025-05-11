@@ -10,7 +10,9 @@ async def process_ai_request(request: PromptRequestModel):
         response = await process_prompt_request(
             prompt_ids=request.prompt_ids,
             model_id=request.model_id,
-            user_message=request.user_message
+            user_message=request.user_message,
+            user_id=request.user_id,
+            conversation_id=request.conversation_id
         )
         return {
             "status": "success",
