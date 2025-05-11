@@ -11,7 +11,7 @@ FROM base AS development
 ENV NODE_ENV=development
 
 # Install all dependencies including devDependencies
-RUN npm ci
+RUN npm install
 
 # Set working directory
 WORKDIR /app
