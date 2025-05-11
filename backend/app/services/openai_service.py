@@ -62,7 +62,7 @@ def test_openai_connection():
     Test the connection to OpenAI API by sending a simple request.
     If OpenAI fails, fallback to Gemini API.
     """
-    prompt = "instroduce yourself in 1 sentence as google gemini"
+    prompt = "introduce yourself in 1 sentence as google gemini"
     try:
         payload = build_payload(prompt)
         response = openai.ChatCompletion.create(**payload)
