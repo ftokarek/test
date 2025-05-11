@@ -12,13 +12,13 @@ const Home = () => {
   return (
     <Layout>
       <AILandingPage />
-      <div className="px-6 md:px-16 lg:px-32 py-8">
-        <HeaderSlider />
+      <div className="px-6 md:px-16 lg:px-32 py-8 " id="second-section">
+        <FeaturedProduct />
         <div className="py-20">
-          <HomeProducts />
+          <HeaderSlider />
         </div>
         <div className="py-8">
-          <FeaturedProduct />
+          <HomeProducts />
         </div>
         <div className="py-20">
           <Banner />

@@ -5,7 +5,7 @@ const Footer = () => {
     <footer className="bg-background text-white">
       <div className="flex flex-col md:flex-row items-start justify-center px-6 md:px-16 lg:px-32 gap-10 py-14 border-b border-gray-700 text-gray-300">
         <div className="w-4/5">
-          <div className="font-bold text-2xl">NeuroSphere</div>
+          <div className="font-bold text-violet-300 text-2xl">NeuroSphere</div>
           <p className="mt-6 text-sm">
             The first decentralized marketplace for AI prompts and models built
             on the Solana blockchain. We connect creators, investors, and users,
