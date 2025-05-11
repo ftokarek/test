@@ -9,10 +9,6 @@ services:
     container_name: fastapi-backend
     ports:
       - "8000:8000"
-    depends_on:
-      - mongo
-    environment:
-      - MONGO_URL=mongodb://mongo:27017/mydatabase
     networks:
       - app-network
 
@@ -64,19 +60,6 @@ services:
   #   networks:
   #     - app-network
 
-  mongo:
-    image: mongo:latest
-    container_name: mongo-db
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
-    networks:
-      - app-network
-
 networks:
   app-network:
     driver: bridge
-
-volumes:
-  mongo-data:
