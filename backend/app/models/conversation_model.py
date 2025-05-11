@@ -1,50 +1,29 @@
 from pydantic import BaseModel, Field
 from typing import List, Optional, Dict, Any
 from bson import ObjectId
-
-#class PyObjectId(ObjectId):
-#    @classmethod
-#    def __get_validators__(cls):
-#        yield cls.validate
-#    @classmethod
-#    def validate(cls, v):
-#        if not ObjectId.is_valid(v):
-#            raise ValueError("Invalid ObjectId")
-#        return ObjectId(v)
+from app.models.prompt_model import PromptModel
+from datetime import datetime
 
 class Message(BaseModel):
-    role: str  #user, asyst, system
+    role: str  #user, error, system
     content: str
-    timestamp: Optional[str] = None  
+    timestamp: str = Field(default_factory=lambda: datetime.now().isoformat()) 
+    #timestamp: Optional[str] = Field(default_factory=lambda: datetime.now().isoformat())  
 
-class ConversationBase(BaseModel):
+class Conversation(BaseModel):
+    id: str
     user_id: int
-    chosen_model: Optional[str] = None #"gpt-3.5"
-    chosen_prompts: Optional[List[str]] = []  
+    chosen_model: Optional[str] = "gemini" #"gpt-3.5"
+    chosen_prompts: Optional[List[str]] = [] ##do fr
+    conversation_title: Optional[str] = "conversation"
     messages: List[Message] = []
-    parameters: Optional[Dict[str, Any]] = {}  
+    parameters: Optional[Dict[str, Any]] = {} 
 
-class ConversationCreate(ConversationBase):
-    pass
+class ConversationCreate(BaseModel):
+    user_id: int
+    chosen_model: Optional[str] = "gemini" #"gpt-3.5"
+    chosen_prompts: Optional[List[str]] = [] ##do fr
+    parameters: Optional[Dict[str, Any]] = {} 
 
-class Conversation(ConversationBase):
- #   id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
-    class Config:
-        allow_population_by_field_name = True
-        arbitrary_types_allowed = True
-        json_encoders = {ObjectId: str}
-        #schema_extra = {
-        #    "example": {
-        #        "user_id": 1,
-        #        "chosen_model": "gpt-3.5",
-        #        "chosen_prompts": ["prompt1", "prompt2"],
-        #        "messages": [
-        #            {"role": "user", "content": "Hello!"},
-        #            {"role": "assistant", "content": "Hi there!"}
-        #        ],
-        #        "parameters": {
-        #            "temperature": 0.7,
-        #            "max_tokens": 150
-        #        }
-        #    }
-        #}
+
+

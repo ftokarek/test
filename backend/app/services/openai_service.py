@@ -1,8 +1,9 @@
 import os
 import openai
 from dotenv import load_dotenv
-from google import genai
-import requests  # Dodano do obsługi Hugging Face API
+from google import genai  
+import requests
+from user_conversation_message_adder import add_message_to_conversation
 
 # Load environment variables
 load_dotenv()
@@ -38,7 +39,7 @@ def parse_response(response):
     Parse the response from the OpenAI API.
     """
     try:
-        return response["choices"][0]["message"]["content"].strip()
+        return response["choices"][0]["message"]["content"].strip() #######!!
     except (KeyError, IndexError) as e:
         raise ValueError(f"Failed to parse OpenAI response: {e}")
 
@@ -49,8 +50,15 @@ def send_to_openai(prompt: str):
     try:
         payload = build_payload(prompt)
         response = openai.ChatCompletion.create(**payload)
+        #user_id = "user_id"  # Replace with actual user ID when possi'bl
+        add_message_to_conversation("user_id", prompt, "user")
+
         return parse_response(response)
     except Exception as e:
+
+        #user_id = "user_id"  # Replace with actual user ID when possi'bl
+        add_message_to_conversation("user_id", "Failed to connect to OpenAI API", "user")
+
         return f"Failed to connect to OpenAI API: {e}"
 
 def send_to_gemini(prompt: str):
@@ -67,9 +75,16 @@ def send_to_gemini(prompt: str):
             contents=prompt
         )
         
-        # Return the generated text
+        #return response..
+        #user_id = "user_id"  # Replace with actual user ID when possi'bl
+        add_message_to_conversation("user_id", prompt, "user")
+
         return response.text.strip()
     except Exception as e:
+
+        #user_id = "user_id"  # Replace with actual user ID when possi'bl
+        add_message_to_conversation("user_id", "Failed to connect to Gemini API", "user")
+        
         return f"Failed to connect to Gemini API: {e}"
 
 def send_to_hugging_face(prompt: str):
@@ -83,8 +98,15 @@ def send_to_hugging_face(prompt: str):
         data = {"inputs": prompt}
         response = requests.post(url, headers=headers, json=data)
         response.raise_for_status()  # Raise an error for HTTP codes 4xx/5xx
+        #user_id = "user_id"  # Replace with actual user ID when possi'bl
+        add_message_to_conversation("user_id", prompt, "user")
+
         return response.json()[0]["generated_text"].strip()
     except Exception as e:
+
+        #user_id = "user_id"  # Replace with actual user ID when possi'bl
+        add_message_to_conversation("user_id", "Failed to connect to Hugging Face API", "user")
+
         return f"Failed to connect to Hugging Face API: {e}"
 
 def test_all_apis():
