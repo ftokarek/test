@@ -6,7 +6,9 @@ from openai_service import build_payload, parse_response
 async def send_request_to_ai_api(
     prompts_data: List[Dict[str, Any]],
     model_info: Dict[str, Any],
-    user_message: str
+    user_message: str,
+    user_id: str,
+    conversation_id: str,
 ) -> Dict[str, Any]:
     try:
         full_prompt = "\n\n".join([prompt["text"] for prompt in prompts_data]) + f"\n\n{user_message}"
@@ -29,7 +31,7 @@ async def send_request_to_ai_api(
                     raise Exception(f"API returned status code {response.status}: {error_text}")
                 
                 response_data = await response.json()
-                return parse_response(api_endpoint, response_data)
+                return parse_response(api_endpoint, response_data, user_id, conversation_id)
     
     except ClientError as e:
         raise Exception(f"HTTP request failed: {str(e)}")
