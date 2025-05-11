@@ -1,39 +1,32 @@
-import aiohttp
 from typing import Dict, List, Any
-from aiohttp import ClientError
-from openai_service import build_payload, parse_response
+from app.services.openai_service import send_to_openai, send_to_gemini, send_to_hugging_face
 
 async def send_request_to_ai_api(
     prompts_data: List[Dict[str, Any]],
-    model_info: Dict[str, Any],
+    model_info: str,
     user_message: str,
     user_id: str,
     conversation_id: str,
+ # Dodano parametr api_choice
 ) -> Dict[str, Any]:
     try:
+
         full_prompt = "\n\n".join([prompt["text"] for prompt in prompts_data]) + f"\n\n{user_message}"
-        
-        api_endpoint = model_info["api_endpoint"]
-        api_key = model_info["api_key"]
-        headers = {
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json",
-            **model_info.get("headers", {})
+
+        # Wybierz odpowiednie API na podstawie api_choice
+        if model_info == "openai":
+            response = send_to_openai(full_prompt)
+        elif model_info == "gemini":
+            response = send_to_gemini(full_prompt)
+        elif model_info == "huggingface":
+            response = send_to_hugging_face(full_prompt)
+        else:
+            raise ValueError(f"Invalid API choice: {model_info}. Please choose 'openai', 'gemini', or 'huggingface'.")
+
+        # Zwróć odpowiedź
+        return {
+            "response": response,
         }
-        
-        payload = build_payload(api_endpoint, model_info, full_prompt)
-        # add user_message to conversation history
-        
-        async with aiohttp.ClientSession() as session:
-            async with session.post(api_endpoint, headers=headers, json=payload) as response:
-                if response.status != 200:
-                    error_text = await response.text()
-                    raise Exception(f"API returned status code {response.status}: {error_text}")
-                
-                response_data = await response.json()
-                return parse_response(api_endpoint, response_data, user_id, conversation_id)
-    
-    except ClientError as e:
-        raise Exception(f"HTTP request failed: {str(e)}")
+
     except Exception as e:
-        raise Exception(f"Unexpected error: {str(e)}")
+        raise Exception(f"Error while processing request with {model_info}: {str(e)}")
