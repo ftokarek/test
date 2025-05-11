@@ -27,36 +27,25 @@ async def send_request_to_ai_api(
 
         # add user_message to conversation history
         
-
-        #user_id = "user_id"  # Replace with actual user ID when possi'bl
-        #add_message_to_conversation("user_id", full_prompt, "user")
         ######## add user msg
 
         async with aiohttp.ClientSession() as session:
             async with session.post(api_endpoint, headers=headers, json=payload) as response:
                 if response.status != 200:
                     error_text = await response.text()
-                    #user_id = "user_id"  # Replace with actual user ID when possi'bl
-                    #error message dodany do konwersacji
-                    add_message_to_conversation("user_id", error_text, "error")
+                    #####tu był adder#####
                     raise Exception(f"API returned status code {response.status}: {error_text}")
                 
                 response_data = await response.json()
                 return parse_response(api_endpoint, response_data)
     
     except ClientError as e:
-        #user_id = "user_id"  # Replace with actual user ID when possi'bl
-        add_message_to_conversation("user_id", "HTTP request failed", "user")
         raise Exception(f"HTTP request failed: {str(e)}")
     except Exception as e:
         #user_id = "user_id"  # Replace with actual user ID when possi'bl
         add_message_to_conversation("user_id", "Unexpected error", "user")
         raise Exception(f"Unexpected error: {str(e)}")
     
-
-        ##user_id = "user_id"  # Replace with actual user ID when possi'bl
-        #add_message_to_conversation("user_id", "Unexpected error", "user")
-        #raise Exception(f"Unexpected error: {str(e)}")
 
 ## to rebuild, to discuss with the team
 def build_payload(api_endpoint: str, model_info: Dict[str, Any], full_prompt: str) -> Dict[str, Any]:

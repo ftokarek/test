@@ -27,7 +27,7 @@ async def create_conversation(conv_data: ConversationCreate):
 
 @router.get("/conversations/{user_id}", response_model=Conversation)
 async def get_conversation(user_id: str):
-    got_conversations = await get_conversation_info()
+    got_conversations = await get_conversation_info(user_id)
     if not got_conversations:
         raise HTTPException(status_code=404, detail="Seller not found")
     return got_conversations

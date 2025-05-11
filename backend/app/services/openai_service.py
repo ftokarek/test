@@ -50,14 +50,12 @@ def send_to_openai(prompt: str):
     try:
         payload = build_payload(prompt)
         response = openai.ChatCompletion.create(**payload)
-        #user_id = "user_id"  # Replace with actual user ID when possi'bl
-        add_message_to_conversation("user_id", prompt, "user")
 
         return parse_response(response)
     except Exception as e:
 
         #user_id = "user_id"  # Replace with actual user ID when possi'bl
-        add_message_to_conversation("user_id", "Failed to connect to OpenAI API", "user")
+        add_message_to_conversation("user_id", "Failed to connect to OpenAI API", "error")
 
         return f"Failed to connect to OpenAI API: {e}"
 
@@ -83,7 +81,7 @@ def send_to_gemini(prompt: str):
     except Exception as e:
 
         #user_id = "user_id"  # Replace with actual user ID when possi'bl
-        add_message_to_conversation("user_id", "Failed to connect to Gemini API", "user")
+        add_message_to_conversation("user_id", "Failed to connect to Gemini API", "error")
         
         return f"Failed to connect to Gemini API: {e}"
 
@@ -105,7 +103,7 @@ def send_to_hugging_face(prompt: str):
     except Exception as e:
 
         #user_id = "user_id"  # Replace with actual user ID when possi'bl
-        add_message_to_conversation("user_id", "Failed to connect to Hugging Face API", "user")
+        add_message_to_conversation("user_id", "Failed to connect to Hugging Face API", "error")
 
         return f"Failed to connect to Hugging Face API: {e}"
 
