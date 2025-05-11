@@ -42,8 +42,6 @@ async def send_request_to_ai_api(
     except ClientError as e:
         raise Exception(f"HTTP request failed: {str(e)}")
     except Exception as e:
-        #user_id = "user_id"  # Replace with actual user ID when possi'bl
-        add_message_to_conversation("user_id", "Unexpected error", "user")
         raise Exception(f"Unexpected error: {str(e)}")
     
 
