@@ -2,9 +2,9 @@ import aiohttp
 from typing import Dict, List, Any
 from aiohttp import ClientError
 
-from openai_service import build_payload, parse_response
+from app.services.openai_service import build_payload, parse_response
 
-from user_conversation_message_adder import add_message_to_conversation
+from app.services.user_conversation_message_adder import add_message_to_conversation
 
 
 async def send_request_to_ai_api(
@@ -46,49 +46,4 @@ async def send_request_to_ai_api(
         add_message_to_conversation("user_id", "Unexpected error", "user")
         raise Exception(f"Unexpected error: {str(e)}")
     
-
-## to rebuild, to discuss with the team
-def build_payload(api_endpoint: str, model_info: Dict[str, Any], full_prompt: str) -> Dict[str, Any]:
-
-    if "openai" in api_endpoint.lower():
-        return {
-            "model": model_info.get("name", "gpt-4"),
-            "messages": [
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": full_prompt}
-            ],
-            **model_info.get("parameters", {})
-        }
-    elif "gemini" in api_endpoint.lower():
-        return {
-            "model": model_info.get("name", "gemini-2.0-flash"),
-            "messages": [
-                {"role": "system", "content": "Jesteś największym władcą."},
-                {"role": "user", "content": full_prompt}
-            ],
-            #"contents": full_prompt,
-            **model_info.get("parameters", {})
-        }
-    else:
-        return {
-            "prompt": full_prompt,
-            "model": model_info.get("name", ""),
-            **model_info.get("parameters", {})
-        }
-    # to upbuild
-
-## same as above
-def parse_response(api_endpoint: str, response_data: Dict[str, Any]) -> Dict[str, Any]:
-
-    if "openai" in api_endpoint.lower():
-        return {
-            "text": response_data.get("choices", [{}])[0].get("message", {}).get("content", ""),
-            "raw_response": response_data
-        }
-    else:
-        return {
-            "text": response_data.get("output", response_data.get("text", response_data.get("response", ""))),
-            "raw_response": response_data
-        }
-    # to upbuild
 
