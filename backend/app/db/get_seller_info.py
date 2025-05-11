@@ -25,6 +25,7 @@ async def create_seller_in_db(seller_data: dict) -> Seller:
         description=created_seller["description"],
         products=created_seller["products"],
         opinions=created_seller["opinions"],
+        public_key=created_seller["public_key"],
     )
 
 async def list_sellers_from_db() -> List[Seller]:
@@ -36,6 +37,7 @@ async def list_sellers_from_db() -> List[Seller]:
             description=seller["description"],
             products=seller["products"],
             opinions=seller["opinions"],
+            public_key=seller["public_key"],
         ))
     return sellers
 
@@ -49,4 +51,10 @@ async def get_seller_from_db(seller_id: str) -> Optional[Seller]:
         description=seller["description"],
         products=seller["products"],
         opinions=seller["opinions"],
+        public_key=seller["public_key"],
     )
+async def get_seller_public_key(seller_id: str) -> Optional[str]:
+    seller = await sellers_collection.find_one({"_id": ObjectId(seller_id)})
+    if not seller:
+        return None
+    return seller["public_key"]
