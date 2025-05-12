@@ -12,10 +12,10 @@ const Navbar = () => {
   return (
     <nav className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-16 lg:px-32 py-5 text-white">
       <div
-        className="font-bold text-2xl tracking-wider cursor-pointer"
+        className="font-bold text-2xl text-violet-300 tracking-wider cursor-pointer"
         onClick={() => router.push('/')}
       >
-        Ailegro
+        NeuroSphere
       </div>
       <div className="flex items-center gap-4 lg:gap-8 max-md:hidden">
         <Link href="/" className="hover:text-blue-300 transition">

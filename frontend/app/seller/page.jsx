@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { useAppContext } from '@/context/AppContext';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
-
 const AddProduct = () => {
   const { getToken } = useAppContext();
   const [files, setFiles] = useState([]);
@@ -14,7 +13,6 @@ const AddProduct = () => {
   const [category, setCategory] = useState('Earphone');
   const [price, setPrice] = useState('');
   const [offerPrice, setOfferPrice] = useState('');
-  const [promptText, setPromptText] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,7 +24,6 @@ const AddProduct = () => {
     formData.append('category', category);
     formData.append('price', price);
     formData.append('offerPrice', offerPrice);
-    formData.append('prompt_text', promptText);
 
     for (let i = 0; i < files.length; i++) {
       formData.append('images', files[i]);
@@ -48,7 +45,6 @@ const AddProduct = () => {
         setCategory('Earphone');
         setPrice('');
         setOfferPrice('');
-        setPromptText('');
       } else {
         toast.error(data.message);
       }
@@ -133,13 +129,11 @@ const AddProduct = () => {
               onChange={(e) => setCategory(e.target.value)}
               defaultValue={category}
             >
-              <option value="Earphone">Earphone</option>
-              <option value="Headphone">Headphone</option>
-              <option value="Watch">Watch</option>
-              <option value="Smartphone">Smartphone</option>
-              <option value="Laptop">Laptop</option>
-              <option value="Camera">Camera</option>
-              <option value="Accessories">Accessories</option>
+              <option value="GPT Models">GPT Models</option>
+              <option value="Prompts">Prompts</option>
+              <option value="Chatbots">Chatbots</option>
+              <option value="Data Analysis">Data Analysis</option>
+              <option value="Image Generation">Image Generation</option>
             </select>
           </div>
           <div className="flex flex-col gap-1 w-32">
@@ -153,20 +147,6 @@ const AddProduct = () => {
               className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
               onChange={(e) => setPrice(e.target.value)}
               value={price}
-              required
-            />
-          </div>
-          <div className="flex flex-col gap-1 w-32">
-            <label className="text-base font-medium" htmlFor="prompt-text">
-              Prompt Text
-            </label>
-            <input
-              id="prompt-text"
-              type="text"
-              placeholder="Enter prompt text"
-              className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
-              onChange={(e) => setPromptText(e.target.value)}
-              value={promptText}
               required
             />
           </div>

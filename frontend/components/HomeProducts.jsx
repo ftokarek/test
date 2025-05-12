@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { GlowingEffectDemo } from './glowing-grid';
 const HomeProducts = () => {
   const categories = [
     {
@@ -34,46 +34,26 @@ const HomeProducts = () => {
       icon: '📊',
       color: 'bg-amber-500',
     },
+    {
+      id: 5,
+      name: 'Image Generation',
+      desc: 'Models for generating images',
+      count: 32,
+      icon: '🎨',
+      color: 'bg-red-500',
+    },
   ];
 
   return (
     <div className="py-16">
-      <div className="flex flex-col items-center mb-10">
-        <h2 className="text-3xl font-medium">
-          AI Model <span className="text-primary">Categories</span>
-        </h2>
-        <div className="w-28 h-0.5 bg-primary mt-2" />
+      <div className="flex flex-col items-center mb-8">
+        <p className="text-3xl text-white font-medium">
+          Services{' '}
+          <span className="font-medium text-violet-300">Categories</span>
+        </p>
+        <div className="w-28 h-0.5 bg-white/30 mt-2" />
       </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {categories.map((category) => (
-          <div
-            key={category.id}
-            className="bg-background rounded-lg overflow-hidden text-white hover:shadow-lg hover:shadow-primary/20 transition"
-          >
-            <div
-              className={`${category.color} p-4 flex items-center justify-between`}
-            >
-              <h3 className="text-xl font-bold">{category.name}</h3>
-              <span className="text-3xl">{category.icon}</span>
-            </div>
-            <div className="p-4">
-              <p className="text-gray-300 mb-3">{category.desc}</p>
-              <div className="flex justify-between items-center">
-                <span className="text-gray-400 text-sm">
-                  {category.count} available
-                </span>
-                <button
-                  type="button"
-                  className="text-sm text-primary hover:text-white hover:bg-primary px-3 py-1 rounded-full border border-primary transition-colors"
-                >
-                  View
-                </button>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+      <GlowingEffectDemo />
     </div>
   );
 };

@@ -11,9 +11,9 @@ const AllProducts = () => {
       <div className="flex flex-col items-start px-6 md:px-16 lg:px-32 pt-20">
         <div className="flex flex-col items-center w-full pt-12 mb-6">
           <h2 className="text-3xl font-medium text-white">
-            All <span className="font-medium text-blue-500">Products</span>
+            All <span className="font-medium text-violet-300">Products</span>
           </h2>
-          <div className="w-28 h-0.5 bg-blue-500 mt-2"></div>
+          <div className="w-28 h-0.5 bg-white/30 mt-2"></div>
           <p className="text-gray-300 mt-4">
             Explore our marketplace of AI models, prompts and tools
           </p>
