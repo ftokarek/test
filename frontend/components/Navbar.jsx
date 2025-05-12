@@ -24,6 +24,9 @@ const Navbar = () => {
         <Link href="/all-products" className="hover:text-blue-300 transition">
           Shop
         </Link>
+        <Link href="/chat" className="hover:text-blue-300 transition">
+          Chat AI
+        </Link>
         {/* TODO: Add about us page */}
         <Link href="/" className="hover:text-blue-300 transition">
           About Us
@@ -98,6 +101,12 @@ const Navbar = () => {
                   />
                 </UserButton.MenuItems>
               )}
+              <UserButton.MenuItems>
+                <UserButton.Action
+                  label="Chat AI"
+                  onClick={() => router.push('/chat')}
+                />
+              </UserButton.MenuItems>
             </UserButton>
           </>
         ) : (
@@ -173,6 +182,12 @@ const Navbar = () => {
                   />
                 </UserButton.MenuItems>
               )}
+              <UserButton.MenuItems>
+                <UserButton.Action
+                  label="Chat AI"
+                  onClick={() => router.push('/chat')}
+                />
+              </UserButton.MenuItems>
             </UserButton>
           </>
         ) : (
