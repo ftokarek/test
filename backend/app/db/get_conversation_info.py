@@ -1,6 +1,6 @@
-from motor import AsyncIOMotorClient
 from app.models.conversation_model import Conversation
 from bson import ObjectId
+from motor.motor_asyncio import AsyncIOMotorClient 
 import asyncio
 import os
 from typing import List, Optional
