@@ -69,7 +69,7 @@ const handlePurchaseWithFee = async (amount, seller_id, user_id, product_id) => 
         // Pobierz klucz publiczny sprzedawcy z backendu
         const sellerPublicKeyString = await getSellerPublicKey(seller_id);
         const sellerPublicKey = new PublicKey(sellerPublicKeyString);
-        const neuroSpherePublicKey = new PublicKey(NEUROSPHERE_PUBLIC_KEY);
+        const neuroSpherePublicKey = new PublicKey(process.env.NEXT_PUBLIC_NEUROSPHERE_PUBLIC_KEY);
 
         // Pobierz produkty użytkownika z backendu
         const userProducts = await getUserProducts(user_id);
@@ -133,7 +133,6 @@ const handlePurchaseWithFee = async (amount, seller_id, user_id, product_id) => 
         
         // Send transaction details to backend
         try {
-            // Dodaj zakupiony produkt do bazy danych użytkownika
             const updateResponse = await fetch(`${BACKEND_URL}/users/${user_id}/products`, {
                 method: "POST",
                 headers: {
