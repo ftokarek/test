@@ -21,11 +21,13 @@ async def send_request_to_ai_api(
 
         # Wybierz odpowiednie API na podstawie api_choice
         if model_info == "openai":
-            response = send_to_openai(full_prompt)
+            #response = send_to_openai(full_prompt)
+            response = send_to_gemini(full_prompt)
         elif model_info == "gemini":
             response = send_to_gemini(full_prompt)
         elif model_info == "huggingface":
-            response = send_to_hugging_face(full_prompt)
+            #response = send_to_hugging_face(full_prompt)
+            response = send_to_gemini(full_prompt)
         else:
             raise ValueError(f"Invalid API choice: {model_info}. Please choose 'openai', 'gemini', or 'huggingface'.")
 
