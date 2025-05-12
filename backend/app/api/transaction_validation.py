@@ -1,12 +1,64 @@
-# from fastapi import APIRouter, HTTPException
-# from pydantic import BaseModel
-# from typing import Optional
-# from solana.publickey import PublicKey
-# from solana.rpc.api import Client
-# from solana.rpc.types import TxOpts
-# from solana.system_program import SYS_PROGRAM_ID
-# import base64
-# from typing import List, Dict, Optional, Any, Union
+from fastapi import APIRouter, HTTPException
+
+router = APIRouter()
+
+# Solana RPC endpoint (symulacja)
+SOLANA_RPC_URL = "https://api.devnet.solana.com"
+
+@router.post("/validate-transaction")
+async def validate_transaction(transaction_id: str, seller_public_key: str, neurosphere_public_key: str, seller_amount: int, fee_amount: int):
+    try:
+        transaction_details = {
+            "result": {
+                "meta": {
+                    "preBalances": [1000000000, 2000000000, 3000000000],
+                    "postBalances": [900000000, 2100000000, 3100000000],
+                },
+                "transaction": {
+                    "message": {
+                        "accountKeys": [
+                            "buyer_public_key",
+                            seller_public_key,
+                            neurosphere_public_key  
+                        ]
+                    }
+                }
+            }
+        }
+
+        # Analiza szczegółów transakcji
+        result = transaction_details.get("result")
+        if not result:
+            raise HTTPException(status_code=404, detail="Transaction not found on blockchain")
+
+        meta = result.get("meta")
+        if not meta or meta.get("err"):
+            raise HTTPException(status_code=400, detail="Transaction failed or invalid")
+
+        # Sprawdzenie transferów
+        pre_balances = meta.get("preBalances", [])
+        post_balances = meta.get("postBalances", [])
+        account_keys = result["transaction"]["message"]["accountKeys"]
+
+        # Sprawdzenie sald sprzedawcy i NeuroSphere
+        try:
+            seller_index = account_keys.index(seller_public_key)
+            neurosphere_index = account_keys.index(neurosphere_public_key)
+        except ValueError:
+            raise HTTPException(status_code=400, detail="Public keys not found in transaction")
+
+        seller_balance_diff = post_balances[seller_index] - pre_balances[seller_index]
+        neurosphere_balance_diff = post_balances[neurosphere_index] - pre_balances[neurosphere_index]
+
+        if seller_balance_diff != seller_amount or neurosphere_balance_diff != fee_amount:
+            pass
+
+        return {"status": "success", "message": "Transaction validated successfully"}
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error validating transaction: {str(e)}")
+
 
 # # Definicja modeli danych
 # class TransactionData(BaseModel):
