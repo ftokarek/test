@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 load_dotenv()  
 
-MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
+MONGO_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017")
 DB_NAME = os.getenv("MONGO_DB_NAME", "ai_models_db")
 COLLECTION_NAME = "conversations"
 

@@ -6,7 +6,7 @@ from typing import List, Optional
 from app.models.seller_model import Seller
 
 load_dotenv()
-MONGO_URI = os.getenv("MONGO_URI")
+MONGO_URI = os.getenv("MONGODB_URI")
 MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
 
 try:
@@ -42,7 +42,7 @@ async def list_sellers_from_db() -> List[Seller]:
     return sellers
 
 async def get_seller_from_db(seller_id: str) -> Optional[Seller]:
-    seller = await sellers_collection.find_one({"_id": ObjectId(seller_id)})
+    seller = await sellers_collection.find_one({"_id": str(seller_id)})
     if not seller:
         return None
     return Seller(
@@ -53,8 +53,8 @@ async def get_seller_from_db(seller_id: str) -> Optional[Seller]:
         opinions=seller["opinions"],
         public_key=seller["public_key"],
     )
-async def get_seller_public_key(seller_id: str) -> Optional[str]:
-    seller = await sellers_collection.find_one({"_id": ObjectId(seller_id)})
+async def get_seller_public_key_db(seller_id: str) -> Optional[str]:
+    seller = await sellers_collection.find_one({"_id": str(seller_id)})
     if not seller:
         return None
     return seller["public_key"]

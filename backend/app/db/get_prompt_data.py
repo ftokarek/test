@@ -6,7 +6,7 @@ from typing import Dict, Any, Optional
 from app.models.prompt_model import PromptModel
 
 load_dotenv()
-MONGO_URI = os.getenv("MONGO_URI")
+MONGO_URI = os.getenv("MONGODB_URI")
 MONGO_DB_NAME = os.getenv("MONGO_DB_NAME")
 
 try:
