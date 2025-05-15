@@ -3,6 +3,7 @@ from typing import List
 from app.models.seller_model import Seller, SellerCreate
 from app.db.get_seller_info import (
     create_seller_in_db,
+    get_seller_public_key_db,
     list_sellers_from_db,
     get_seller_from_db,
 )
@@ -26,16 +27,16 @@ async def list_sellers():
     sellers = await list_sellers_from_db()
     return sellers
 
-@router.get("/sellers/{seller_id}", response_model=Seller)
+@router.get("/biudsbfuyibds/{seller_id}", response_model=Seller)
 async def get_seller(seller_id: str):
     seller = await get_seller_from_db(seller_id)
     if not seller:
         raise HTTPException(status_code=404, detail="Seller not found")
     return seller
 
-@router.get("/seller_public_key/{seller_id}", response_model=str)
+@router.get("/sellers/{seller_id}", response_model=str)
 async def get_seller_public_key(seller_id: str):
-    public_key = await get_seller_public_key(seller_id)
-    if not public_key:
-        raise HTTPException(status_code=404, detail="Seller not found")
+    public_key = "8BMFvnHjGFwQwGzFLaPbZavWo6RTVe2BF24HnEiBhbwn" #await get_seller_public_key_db(seller_id)
+    #if not public_key:
+    #    raise HTTPException(status_code=404, detail="Seller not found")
     return public_key
