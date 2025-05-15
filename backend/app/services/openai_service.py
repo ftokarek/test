@@ -43,7 +43,7 @@ def parse_response(response):
     except (KeyError, IndexError) as e:
         raise ValueError(f"Failed to parse OpenAI response: {e}")
 
-def send_to_openai(prompt: str):
+def send_to_openai(prompt: str, conversation_id: str, user_id: str):
     """
     Send the prompt to OpenAI API.
     """
@@ -54,12 +54,12 @@ def send_to_openai(prompt: str):
         return parse_response(response)
     except Exception as e:
 
-        #user_id = "user_id"  # Replace with actual user ID when possi'bl
-        add_message_to_conversation("user_id", "Failed to connect to OpenAI API", "error")
+        # conversation_id  # Replace with actual user ID when possi'bl
+        add_message_to_conversation(conversation_id, "Failed to connect to OpenAI API", "error")
 
         return f"Failed to connect to OpenAI API: {e}"
 
-def send_to_gemini(prompt: str):
+def send_to_gemini(prompt: str, conversation_id: str, user_id: str):
     """
     Send the prompt to Gemini API using Google GenAI.
     """
@@ -74,18 +74,18 @@ def send_to_gemini(prompt: str):
         )
         
         #return response..
-        #user_id = "user_id"  # Replace with actual user ID when possi'bl
-        add_message_to_conversation("user_id", response.text.strip(), "user")
+        #user_id = conversation_id  # Replace with actual user ID when possi'bl
+        add_message_to_conversation(conversation_id, response.text.strip(), "user")
 
         return response.text.strip()
     except Exception as e:
 
-        #user_id = "user_id"  # Replace with actual user ID when possi'bl
-        add_message_to_conversation("user_id", "Failed to connect to Gemini API", "error")
+        #user_id = conversation_id  # Replace with actual user ID when possi'bl
+        add_message_to_conversation(conversation_id, "Failed to connect to Gemini API", "error")
         
         return f"Failed to connect to Gemini API: {e}"
 
-def send_to_hugging_face(prompt: str):
+def send_to_hugging_face(prompt: str, conversation_id: str, user_id: str):
     """
     Send the prompt to Hugging Face API.
     """
@@ -96,14 +96,14 @@ def send_to_hugging_face(prompt: str):
         data = {"inputs": prompt}
         response = requests.post(url, headers=headers, json=data)
         response.raise_for_status()  # Raise an error for HTTP codes 4xx/5xx
-        #user_id = "user_id"  # Replace with actual user ID when possi'bl
-        add_message_to_conversation("user_id", response.json()[0]["generated_text"].strip(), "user")
+        #user_id = conversation_id  # Replace with actual user ID when possi'bl
+        add_message_to_conversation(conversation_id, response.json()[0]["generated_text"].strip(), "user")
 
         return response.json()[0]["generated_text"].strip()
     except Exception as e:
 
-        #user_id = "user_id"  # Replace with actual user ID when possi'bl
-        add_message_to_conversation("user_id", "Failed to connect to Hugging Face API", "error")
+        #user_id = conversation_id  # Replace with actual user ID when possi'bl
+        add_message_to_conversation(conversation_id, "Failed to connect to Hugging Face API", "error")
 
         return f"Failed to connect to Hugging Face API: {e}"
 
@@ -113,13 +113,13 @@ def test_all_apis():
     """
     prompt = "Introduce yourself in 1 sentence as a language model."
     print("\nTesting OpenAI API...\n")
-    openai_response = send_to_openai(prompt)
+    openai_response = send_to_openai(prompt, "1", "1")
     print(f"OpenAI Response: {openai_response}\n")
 
     print("\nTesting Gemini API...\n")
-    gemini_response = send_to_gemini(prompt)
+    gemini_response = send_to_gemini(prompt, "1", "1")
     print(f"Gemini Response: {gemini_response}\n")
 
     print("\nTesting Hugging Face API...\n")
-    hugging_face_response = send_to_hugging_face(prompt)
+    hugging_face_response = send_to_hugging_face(prompt, "1", "1")
     print(f"Hugging Face Response: {hugging_face_response}\n")
