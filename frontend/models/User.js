@@ -24,9 +24,8 @@ const userSchema = new mongoose.Schema(
       default: {},
     },
     ownedProducts:{
-      type: String,
-      default: [],
-      ref: 'product',
+      type: Object,
+      default: {},
     }
   },
   { minimize: false }

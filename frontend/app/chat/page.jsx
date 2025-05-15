@@ -13,55 +13,168 @@ const Chat = () => {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
-  const [chats, setChats] = useState([
-    { id: 1, title: 'Czat 1', createdAt: new Date() },
-    { id: 2, title: 'Czat 2', createdAt: new Date() },
-  ]);
+  const [chats, setChats] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedModel, setSelectedModel] = useState('');
+  const [selectedPrompts, setSelectedPrompts] = useState([]);
+  const [availablePrompts, setAvailablePrompts] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
-
+  useEffect(() => {
+    // Pobierz rozmowy użytkownika po załadowaniu komponentu
+    fetchUserConversations();
+  }, []);
   useEffect(() => {
     // Przewijanie do najnowszej wiadomości
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
+  const fetchUserPrompts = async () => {
+    try {
+      const token = await getToken(); // Pobierz token użytkownika
+      const response = await fetch(`http://localhost:8000/get_user_prompts/${user.id}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Err.');
+      }
+      const data = await response.json();
+      setAvailablePrompts(data);
+    } catch (err) {
+      console.error('Err:', err.message);
+    }
+  }
+
+  const fetchUserConversations = async () => {
+    try {
+      const token = await getToken(); // Pobierz token użytkownika
+      const response = await fetch(`http://localhost:8000/conversations/${user.id}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Err.');
+      }
+
+      const data = await response.json();
+      setChats(data);
+    }
+    catch (err) {
+      console.error('Err:', err.message);
+    }
+  }
+
   const handleNewChat = () => {
-    const newChat = {
-      id: Date.now(),
-      title: 'Nowy czat',
-      createdAt: new Date(),
-    };
-    setChats([newChat, ...chats]);
-    setCurrentChat(newChat);
-    setMessages([]);
+    setIsModalOpen(true);
   };
 
-  const handleSendMessage = async () => {
-    if (!input.trim()) return;
+  const handlePromptSelection = (prompt) => {
+  setSelectedPrompts((prev) =>
+    prev.includes(prompt)
+      ? prev.filter((p) => p !== prompt)
+      : [...prev, prompt]
+  );
+  };
 
-    // Dodaj wiadomość użytkownika
-    const userMessage = {
-      id: Date.now(),
-      content: input,
-      role: 'user',
+  const handleCreateChat = async () => {
+  if (!selectedModel || selectedPrompts.length === 0) {
+    alert('Select model and at least one prompt!');
+    return;
+  }
+
+  try {
+    const token = await getToken(); // Pobierz token użytkownika
+    const response = await fetch(`http://localhost:8000/conversations/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        user_id: user.id,
+        chosen_model: selectedModel,
+        chosen_prompts: selectedPrompts,
+        parameters: []
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Nie udało się utworzyć nowego czatu.');
+    }
+
+    const newChat = await response.json();
+    setChats((prev) => [newChat, ...prev]);
+    setCurrentChat(newChat);
+    setMessages([]);
+    setIsModalOpen(false);
+  } catch (err) {
+    console.error('Błąd podczas tworzenia czatu:', err.message);
+    alert('Wystąpił błąd podczas tworzenia czatu.');
+  }
+};
+
+const handleSendMessage = async () => {
+  if (!input.trim()) return;
+
+  // Dodaj wiadomość użytkownika do listy wiadomości
+  const userMessage = {
+    id: Date.now(),
+    content: input,
+    role: 'user',
+    timestamp: new Date(),
+  };
+
+  setMessages((prev) => [...prev, userMessage]);
+  setInput('');
+  setIsLoading(true);
+
+  try {
+    // Pobierz token użytkownika
+    const token = await getToken();
+
+    // Wyślij wiadomość do backendu
+    const response = await fetch(`http://localhost:8000/prompt-request`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        prompt_ids: selectedPrompts.ids,
+        model_id: selectedModel,
+        user_message: input,
+        user_id: user.id,
+        conversation_id: currentChat.id,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Nie udało się wysłać wiadomości.');
+    }
+
+    // Odbierz odpowiedź od backendu
+    const data = await response.json();
+    const botResponse = {
+      id: Date.now() + 1,
+      content: data.response, 
+      role: 'assistant',
       timestamp: new Date(),
     };
 
-    setMessages((prev) => [...prev, userMessage]);
-    setInput('');
-    setIsLoading(true);
-
-    // Symulacja odpowiedzi AI (tutaj można zintegrować z rzeczywistym API)
-    setTimeout(() => {
-      const botResponse = {
-        id: Date.now() + 1,
-        content: `To jest przykładowa odpowiedź na: "${input}"`,
-        role: 'assistant',
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, botResponse]);
-      setIsLoading(false);
-    }, 1000);
-  };
+    // Dodaj odpowiedź bota do listy wiadomości
+    setMessages((prev) => [...prev, botResponse]);
+  } catch (err) {
+    console.error('Błąd podczas wysyłania wiadomości:', err.message);
+    alert('Wystąpił błąd podczas wysyłania wiadomości.');
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="flex flex-col h-screen bg-black">
@@ -129,14 +242,7 @@ const Chat = () => {
           <div className="flex-1 overflow-y-auto p-4 space-y-6">
             {messages.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center text-white">
-                <Image
-                  src={assets.animated_logo || '/logo.png'}
-                  alt="Logo"
-                  width={120}
-                  height={120}
-                  className="mb-6"
-                />
-                <h1 className="text-3xl font-bold mb-2">NeuroSphere Chat</h1>
+                <h1 className="text-3xl font-bold mb-2 font-bold text-violet-300 tracking-wider">NeuroSphere Chat</h1>
                 <p className="text-gray-400 max-w-md">
                   Rozpocznij rozmowę z naszym modelem AI
                 </p>
@@ -178,6 +284,58 @@ const Chat = () => {
             )}
             <div ref={messagesEndRef} />
           </div>
+          {isModalOpen && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-[#121212] p-6 rounded-lg w-96">
+                <h2 className="text-white text-lg font-bold mb-4">Ustawienia nowego czatu</h2>
+                
+                {/* Wybór modelu */}
+                <label className="text-gray-400 block mb-2">Wybierz model:</label>
+                <select
+                  value={selectedModel}
+                  onChange={(e) => setSelectedModel(e.target.value)}
+                  className="w-full p-2 bg-[#2e2e2e] text-white rounded-md mb-4"
+                >
+                  <option value="">Wybierz model</option>
+                  <option value="gemini">Gemini</option>
+                  <option value="huggingface">Huggingface</option>
+                  <option value="openai">ChatGPT</option>
+                </select>
+
+                {/* Wybór promptów */}
+                <label className="text-gray-400 block mb-2">Wybierz prompty:</label>
+                <div className="flex flex-col gap-2 mb-4">
+                  {availablePrompts.map((prompt) => (
+                    <label key={prompt.id} className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        value={prompt.title}
+                        onChange={(e) => handlePromptSelection(e.target.value)}
+                        className="form-checkbox"
+                      />
+                      <span className="text-white">{prompt.name}</span>
+                    </label>
+                  ))}
+                </div>
+
+                {/* Przyciski */}
+                <div className="flex justify-end gap-2">
+                  <button
+                    onClick={() => setIsModalOpen(false)}
+                    className="bg-gray-700 text-white px-4 py-2 rounded-md"
+                  >
+                    Anuluj
+                  </button>
+                  <button
+                    onClick={handleCreateChat}
+                    className="bg-violet-500 text-white px-4 py-2 rounded-md"
+                  >
+                    Utwórz
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Obszar wprowadzania wiadomości */}
           <div className="p-4 border-t border-gray-800 bg-[#181818]">

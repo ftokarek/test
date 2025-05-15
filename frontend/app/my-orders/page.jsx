@@ -108,7 +108,8 @@ const MyOrders = () => {
                       order.amount,  
                       order.items[0].product.userId, 
                       user.id, 
-                      order.items[0].product.id
+                      order.items[0].product.id,
+                      order.items[0].product.name
                       )
                     }
                     }

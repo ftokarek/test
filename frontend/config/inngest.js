@@ -84,3 +84,33 @@ export const createUserOrder = inngest.createFunction(
     };
   }
 );
+
+// Inngest function to handle prompt purchase
+export const syncUserPromptPurchase = inngest.createFunction(
+  { id: 'sync-user-prompt-purchase' },
+  { event: 'user/prompt.purchased' },
+  async ({ event }) => {
+    const { user_id, prompt } = event.data; // Oczekiwane dane z eventu
+    await connectDB();
+
+    try {
+      // Zaktualizuj użytkownika, dodając zakupiony prompt
+      await User.findByIdAndUpdate(
+        { _id: user_id },
+        {
+          $push: {
+            prompts: {
+              id: prompt.id,
+              title: prompt.title            },
+          },
+        },
+        { upsert: true } // Utwórz użytkownika, jeśli nie istnieje
+      );
+
+      console.log(`Prompt ${prompt.title} added to user ${user_id}`);
+    } catch (err) {
+      console.error('Error updating user prompts:', err);
+      throw new Error('Failed to update user prompts in database');
+    }
+  }
+);
