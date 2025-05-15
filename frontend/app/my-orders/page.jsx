@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { assets } from '@/assets/assets';
 import Image from 'next/image';
 import { useAppContext } from '@/context/AppContext';
+import { handlePurchaseWithFee } from '@/models/Payments';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
 import Loading from '@/components/Loading';
@@ -97,7 +98,20 @@ const MyOrders = () => {
                     </p>
                   </div>
                   <button
-                    onClick={() => console.log('płać synu')}
+                    onClick={() => {
+                      console.log("order:", order)
+                      console.log("amount: ", order.amount)
+                      console.log("seller_id: ", order.items[0].product.userId)
+                      console.log("user_id: ", user.id)
+                      console.log("product_id: ", order.items[0].product._id)
+                      handlePurchaseWithFee(
+                      order.amount,  
+                      order.items[0].product.userId, 
+                      user.id, 
+                      order.items[0].product.id
+                      )
+                    }
+                    }
                     className="bg-violet-500 text-white px-4 py-2 rounded-md"
                   >
                     Pay
