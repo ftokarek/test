@@ -8,7 +8,8 @@ import { assets } from '@/assets/assets';
 import Link from 'next/link';
 
 const Chat = () => {
-  const { user, getToken } = useAppContext();
+  const { user } = useAppContext();
+  const { getToken } = useAppContext();
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -21,7 +22,7 @@ const Chat = () => {
   const [currentChat, setCurrentChat] = useState(null);
   useEffect(() => {
     // Pobierz rozmowy użytkownika po załadowaniu komponentu
-    fetchUserConversations();
+    //fetchUserConversations();
   }, []);
   useEffect(() => {
     // Przewijanie do najnowszej wiadomości
@@ -31,17 +32,20 @@ const Chat = () => {
   const fetchUserPrompts = async () => {
     try {
       const token = await getToken(); // Pobierz token użytkownika
-      const response = await fetch(`http://localhost:8000/get_user_prompts/${user.id}`, {
-        method: 'GET',
+      const response = await fetch(`/api/user/get-prompts`, {
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
         },
+        body: JSON.stringify({
+          userId: user.id
+        })
       });
       if (!response.ok) {
         throw new Error('Err.');
       }
       const data = await response.json();
-      setAvailablePrompts(data);
+      setAvailablePrompts(data.ownedProducts.filter((prompt) => prompt.id !== null));
     } catch (err) {
       console.error('Err:', err.message);
     }
@@ -69,7 +73,8 @@ const Chat = () => {
     }
   }
 
-  const handleNewChat = () => {
+  const handleNewChat = async() => {
+    await fetchUserPrompts()
     setIsModalOpen(true);
   };
 
@@ -309,11 +314,11 @@ const handleSendMessage = async () => {
                     <label key={prompt.id} className="flex items-center gap-2">
                       <input
                         type="checkbox"
-                        value={prompt.title}
+                        value={prompt.id}
                         onChange={(e) => handlePromptSelection(e.target.value)}
-                        className="form-checkbox"
+                        className="form-checkbox text-white"
                       />
-                      <span className="text-white">{prompt.name}</span>
+                      <span className="text-white">{prompt.title}</span>
                     </label>
                   ))}
                 </div>
