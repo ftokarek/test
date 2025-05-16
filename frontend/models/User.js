@@ -1,3 +1,4 @@
+import { PublicKey } from '@solana/web3.js';
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema(
@@ -24,9 +25,9 @@ const userSchema = new mongoose.Schema(
       default: {},
     },
     ownedProducts:{
-      type: Object,
-      default: {},
-    }
+      type: Array,
+      default: [],
+    },
   },
   { minimize: false }
 );
