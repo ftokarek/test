@@ -123,18 +123,18 @@ const Chat = () => {
     });
 
     if (!response.ok) {
-      throw new Error('Nie udało się utworzyć nowego czatu.');
+      throw new Error('Failed to create a new chat.');
     }
 
     const newChat = await response.json();
-    console.log('Utworzono nowy czat:', newChat);
+    console.log('A new chat has been created:', newChat);
     setChats((prev) => [newChat, ...prev]);
     setCurrentChat(newChat);
     setMessages([]);
     setIsModalOpen(false);
   } catch (err) {
-    console.error('Błąd podczas tworzenia czatu:', err.message);
-    alert('Wystąpił błąd podczas tworzenia czatu.');
+    console.error('Error while creating chat:', err.message);
+    alert('An error occurred while creating the chat.');
   }
 };
 
@@ -172,7 +172,7 @@ const handleSendMessage = async () => {
     });
 
     if (!response.ok) {
-      throw new Error('Nie udało się wysłać wiadomości.');
+      throw new Error('Failed to send the message.');
     }
 
     // Odbierz odpowiedź od backendu
@@ -186,8 +186,8 @@ const handleSendMessage = async () => {
 
     setMessages((prev) => [...prev, botResponse]);
   } catch (err) {
-    console.error('Błąd podczas wysyłania wiadomości:', err.message);
-    alert('Wystąpił błąd podczas wysyłania wiadomości.');
+    console.error('Error while sending the message:', err.message);
+    alert('An error occurred while sending the message.');
   } finally {
     setIsLoading(false);
   }
@@ -220,13 +220,13 @@ const handleSendMessage = async () => {
                 <line x1="12" y1="5" x2="12" y2="19"></line>
                 <line x1="5" y1="12" x2="19" y2="12"></line>
               </svg>
-              Nowy czat
+              New chat
             </button>
           </div>
 
           {/* Lista czatów */}
           <div className="flex-1 overflow-y-auto px-2">
-            <div className="text-xs text-gray-500 px-3 py-2">Dzisiaj</div>
+            <div className="text-xs text-gray-500 px-3 py-2">Recent conversations</div>
             {chats.map((chat) => (
               <button
                 key={chat.id}
@@ -261,7 +261,7 @@ const handleSendMessage = async () => {
               <div className="h-full flex flex-col items-center justify-center text-center text-white">
                 <h1 className="text-3xl font-bold mb-2 text-violet-300 tracking-wider">NeuroSphere Chat</h1>
                 <p className="text-gray-400 max-w-md">
-                  Rozpocznij rozmowę z naszym modelem AI
+                Start a conversation with our AI model
                 </p>
               </div>
             ) : (
@@ -304,23 +304,23 @@ const handleSendMessage = async () => {
           {isModalOpen && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
               <div className="bg-[#121212] p-6 rounded-lg w-96">
-                <h2 className="text-white text-lg font-bold mb-4">Ustawienia nowego czatu</h2>
+                <h2 className="text-white text-lg font-bold mb-4">New chat settings</h2>
                 
                 {/* Wybór modelu */}
-                <label className="text-gray-400 block mb-2">Wybierz model:</label>
+                <label className="text-gray-400 block mb-2">Select model:</label>
                 <select
                   value={selectedModel}
                   onChange={(e) => setSelectedModel(e.target.value)}
                   className="w-full p-2 bg-[#2e2e2e] text-white rounded-md mb-4"
                 >
-                  <option value="">Wybierz model</option>
+                  <option value="">Select Model</option>
                   <option value="gemini">Gemini</option>
                   <option value="huggingface">Huggingface</option>
                   <option value="openai">ChatGPT</option>
                 </select>
 
                 {/* Wybór promptów */}
-                <label className="text-gray-400 block mb-2">Wybierz prompty:</label>
+                <label className="text-gray-400 block mb-2">Select prompts:</label>
                 <div className="flex flex-col gap-2 mb-4">
                   {availablePrompts.map((prompt) => (
                     <label key={prompt.id} className="flex items-center gap-2">
