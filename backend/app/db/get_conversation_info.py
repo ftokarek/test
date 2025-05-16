@@ -1,3 +1,4 @@
+from datetime import datetime
 from app.models.conversation_model import Conversation
 from bson import ObjectId
 from motor.motor_asyncio import AsyncIOMotorClient 
@@ -93,23 +94,25 @@ async def update_conversation_in_db(conversation_id: str, update_data: dict):
     
     
 async def update_message_to_conversation(conversation_id: str, message: str, rol: str):
-    """
-    Adds a message to the conversation with the given ID.
-    """
+    print("final step")
     conversation_collection = await connect_to_mongo()
     print("Connected to MongoDB")
     try:
         # Create a new message object
         new_message = {
             "role": rol,
-            "content": message
+            "content": message,
+            "timestamp": datetime.now().isoformat()  # Dodanie znacznika czasu
         }
+        print(new_message)
+        filter = {"_id": ObjectId(conversation_id)} 
 
         # Use $push to add the new message to the messages list
         await conversation_collection.update_one(
-            conversation_id,
+            filter,
             {"$push": {"messages": new_message}}
         )
+        print("updated")
     except Exception as e:
         raise RuntimeError(f"Error while adding message to conversation: {e}")
     
