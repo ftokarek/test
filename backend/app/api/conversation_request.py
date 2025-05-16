@@ -1,20 +1,23 @@
 from fastapi import APIRouter, HTTPException
 from typing import List
 from bson import ObjectId
-from app.models.conversation_model import Conversation, ConversationCreate
+from app.models.conversation_model import Conversation, ConversationCreate, Message
 from app.db.get_conversation_info import create_conversation_in_db, get_conversation_info
 from app.services.openai_service import parse_response
 
 router = APIRouter()
 
 @router.post("/conversations/", response_model=Conversation)
-async def create_conversation(conv_data: ConversationCreate):
+async def create_conversation(conv_data: dict):
     try:
+        print(conv_data)
         conv_dict = {
-            "user_id": conv_data.user_id,
-            "chosen_model": conv_data.chosen_model,
-            "chosen_prompts": conv_data.chosen_prompts,
-            "parameters": conv_data.parameters
+            "user_id": conv_data['user_id'],
+            "chosen_model": conv_data['chosen_model'],
+            "chosen_prompts": conv_data['chosen_prompts'],
+            "parameters": {},
+            "messages": [],
+            "conversation_title": "Default"
         }
         conv_final = await create_conversation_in_db(conv_dict)
         return conv_final

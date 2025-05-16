@@ -9,21 +9,26 @@ from dotenv import load_dotenv
 load_dotenv()  
 
 MONGO_URI = os.getenv("MONGODB_URI", "mongodb://localhost:27017")
-DB_NAME = os.getenv("MONGO_DB_NAME", "ai_models_db")
+DB_NAME = os.getenv("MONGO_DB_NAME", "neurosphere")
 COLLECTION_NAME = "conversations"
 
-try:
-    client = AsyncIOMotorClient(MONGO_URI)
-    db = client[DB_NAME]
-    conversation_collection = db[COLLECTION_NAME]
-except Exception as e:
-    raise RuntimeError(f"Failed to connect to MongoDB: {e}")
+async def connect_to_mongo():
+    try:
+        client = AsyncIOMotorClient(MONGO_URI)
+        db = client[DB_NAME]
+        conversation_collection = db[COLLECTION_NAME]
+        return conversation_collection
+    except Exception as e:
+        raise RuntimeError(f"Failed to connect to MongoDB: {e}")
+
 
 async def create_conversation_in_db(conversation_data: dict) -> Conversation:
+    conversation_collection = await connect_to_mongo()
     try:
         #result = await conversation_collection.insert_one(conversation_data)
         #await conversation_collection.find_one({"_id": result.inserted_id})
         result = await conversation_collection.insert_one(conversation_data)
+
         created_conversation = await conversation_collection.find_one({"_id": result.inserted_id})
         return Conversation(
             id=str(created_conversation["_id"]),
@@ -40,6 +45,8 @@ async def create_conversation_in_db(conversation_data: dict) -> Conversation:
 
 
 async def get_conversation_info(user_id: str):
+    conversation_collection = await connect_to_mongo()
+    print("Connected to MongoDB")
     try:
         conversation = await conversation_collection.find_one({"_id": ObjectId(user_id)})
         if not conversation:
@@ -59,6 +66,10 @@ async def get_conversation_info(user_id: str):
     
 
 async def update_conversation_in_db(conversation_id: str, update_data: dict):
+    conversation_collection = await connect_to_mongo()
+    print("Connected to MongoDB")
+    
+    #"""
    #"""
    #Updates a conversation in the MongoDB database.
    #
@@ -85,6 +96,8 @@ async def update_message_to_conversation(conversation_id: str, message: str, rol
     """
     Adds a message to the conversation with the given ID.
     """
+    conversation_collection = await connect_to_mongo()
+    print("Connected to MongoDB")
     try:
         # Create a new message object
         new_message = {
