@@ -8,12 +8,14 @@ import { useParams } from 'next/navigation';
 import Loading from '@/components/Loading';
 import { useAppContext } from '@/context/AppContext';
 import React from 'react';
+import { handlePurchaseWithFee } from '@/models/Payments';
 
 const Product = () => {
   const { id } = useParams();
   const { products, router, addToCart } = useAppContext();
   const [mainImage, setMainImage] = useState(null);
   const [productData, setProductData] = useState(null);
+  const { user } = useAppContext();
 
   const fetchProductData = async () => {
     const product = products.find((product) => product._id === id);
@@ -138,9 +140,20 @@ const Product = () => {
               </button>
               <button
                 onClick={() => {
-                  addToCart(productData._id);
-                  router.push('/cart');
-                }}
+                  console.log("order:", productData)
+                  console.log("amount: ", productData.offerPrice)
+                  console.log("seller_id: ", productData.userId)
+                  console.log("user_id: ", user.id)
+                  console.log("product_id: ", productData._id)
+                  handlePurchaseWithFee(
+                  productData.offerPrice,  
+                  productData.userId, 
+                  user.id, 
+                  productData._id,
+                  productData.name
+                  )
+                }
+                }
                 className="w-full py-3.5 bg-blue-600 text-white hover:bg-blue-700 transition rounded-lg"
               >
                 Buy Now
