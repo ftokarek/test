@@ -104,7 +104,7 @@ const Chat = () => {
         user_id: user.id,
         chosen_model: selectedModel,
         chosen_prompts: selectedPrompts,
-        parameters: []
+        parameters: {}
       }),
     });
 
@@ -113,6 +113,7 @@ const Chat = () => {
     }
 
     const newChat = await response.json();
+    console.log('Utworzono nowy czat:', newChat);
     setChats((prev) => [newChat, ...prev]);
     setCurrentChat(newChat);
     setMessages([]);
@@ -150,7 +151,7 @@ const handleSendMessage = async () => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        prompt_ids: selectedPrompts.ids,
+        prompt_ids: selectedPrompts,
         model_id: selectedModel,
         user_message: input,
         user_id: user.id,
@@ -166,12 +167,11 @@ const handleSendMessage = async () => {
     const data = await response.json();
     const botResponse = {
       id: Date.now() + 1,
-      content: data.response, 
+      content: data.response.response, 
       role: 'assistant',
       timestamp: new Date(),
     };
 
-    // Dodaj odpowiedź bota do listy wiadomości
     setMessages((prev) => [...prev, botResponse]);
   } catch (err) {
     console.error('Błąd podczas wysyłania wiadomości:', err.message);
@@ -235,7 +235,7 @@ const handleSendMessage = async () => {
                     d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
                   ></path>
                 </svg>
-                <span className="truncate">{chat.title}</span>
+                <span className="truncate">{chat.conversation_title}</span>
               </button>
             ))}
           </div>
