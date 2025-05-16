@@ -17,6 +17,7 @@ except Exception as e:
 
 async def get_prompt_data(prompt_id: str) -> Optional[Dict[str, Any]]:
     try:
+        print("Connected to MongoDB")
         collection = db["products"]
         
         query = {"_id": ObjectId(prompt_id)} if ObjectId.is_valid(prompt_id) else {"_id": prompt_id}
@@ -24,10 +25,11 @@ async def get_prompt_data(prompt_id: str) -> Optional[Dict[str, Any]]:
         prompt_data = await collection.find_one(query)
         if not prompt_data:
             return None
+        print(prompt_data)
 
         return PromptModel(
             id=str(prompt_data["_id"]),
-            text=prompt_data.get("prompt_text", ""),
+            text=str(prompt_data["promptText"]),
         )
 
     except Exception as e:
