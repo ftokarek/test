@@ -7,6 +7,7 @@ async def process_prompt_request(prompt_ids: list, model_id: str, user_message: 
     prompts_data = []
     for prompt_id in prompt_ids:
         prompt_data = await get_prompt_data(prompt_id)
+        print(prompt_data)
         if not prompt_data:
             raise HTTPException(status_code=404, detail=f"Prompt ID {prompt_id} not found!")
         prompts_data.append(prompt_data)
@@ -14,7 +15,6 @@ async def process_prompt_request(prompt_ids: list, model_id: str, user_message: 
     #model_info = await get_model_api_info(model_id)
     #if not model_info:
     #    raise HTTPException(status_code=404, detail=f"Model ID {model_id} not found!")
-    
     response = await send_request_to_ai_api(
         prompts_data = prompts_data,
         model_info = model_id,
