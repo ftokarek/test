@@ -28,11 +28,15 @@ async def create_conversation(conv_data: dict):
 
 
 
-@router.get("/conversations/{user_id}", response_model=Conversation)
+@router.get("/conversations/{user_id}", response_model=[])
 async def get_conversation(user_id: str):
+    print("User ID:", user_id)
     got_conversations = await get_conversation_info(user_id)
     if not got_conversations:
         raise HTTPException(status_code=404, detail="Conversation not found")
+    for conversation in got_conversations:
+        conversation["_id"] = str(conversation["_id"])
+    print("Got conversations:", got_conversations)
     return got_conversations
     
 
