@@ -57,7 +57,7 @@ async def get_conversation_info(user_id: str):
             user_id=conversation["user_id"],
             chosen_model=conversation["chosen_model"],
             chosen_prompts=conversation["chosen_prompts"],
-            conversation_title=conversation["conversation_title"], # stworzenia
+            conversation_title=conversation["conversation_title"],
             parameters=conversation["parameters"],
             messages=conversation["messages"],
         )

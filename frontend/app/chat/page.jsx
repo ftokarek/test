@@ -53,7 +53,17 @@ const Chat = () => {
 
   const fetchUserConversations = async () => {
     try {
-      const token = await getToken(); // Pobierz token użytkownika
+      if (!user) {
+        console.error('User is not logged in or user data is not loaded.');
+        return;
+      }
+
+      const token = await getToken();
+      if (!token) {
+        console.error('Failed to retrieve token. User might not be authenticated.');
+        return;
+      }
+
       const response = await fetch(`http://localhost:8000/conversations/${user.id}`, {
         method: 'GET',
         headers: {
@@ -62,14 +72,18 @@ const Chat = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Err.');
+        throw new Error(`Failed to fetch conversations. Status: ${response.status}`);
       }
 
       const data = await response.json();
+      if (!data || data.length === 0) {
+        console.warn('No conversations found for the user.');
+      }
+
       setChats(data);
-    }
-    catch (err) {
-      console.error('Err:', err.message);
+      console.log('Conversations fetched successfully:', data);
+    } catch (err) {
+      console.error('Error fetching conversations:', err.message);
     }
   }
 
@@ -139,10 +153,8 @@ const handleSendMessage = async () => {
   setIsLoading(true);
 
   try {
-    // Pobierz token użytkownika
     const token = await getToken();
 
-    // Wyślij wiadomość do backendu
     const response = await fetch(`http://localhost:8000/prompt-request`, {
       method: 'POST',
       headers: {
