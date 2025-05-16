@@ -1,8 +1,10 @@
+import asyncio
 import os
 import openai
 from dotenv import load_dotenv
 from google import genai  
 import requests
+from app.db.get_conversation_info import update_message_to_conversation
 from app.services.user_conversation_message_adder import add_message_to_conversation
 
 # Load environment variables
@@ -55,7 +57,7 @@ def send_to_openai(prompt: str, conversation_id: str, user_id: str):
     except Exception as e:
 
         # conversation_id  # Replace with actual user ID when possi'bl
-        add_message_to_conversation(conversation_id, "Failed to connect to OpenAI API", "error")
+        asyncio.create_task(add_message_to_conversation(conversation_id, "Failed to connect to OpenAI API", "error"))
 
         return f"Failed to connect to OpenAI API: {e}"
 
@@ -75,13 +77,14 @@ def send_to_gemini(prompt: str, conversation_id: str, user_id: str):
         
         #return response..
         #user_id = conversation_id  # Replace with actual user ID when possi'bl
-        add_message_to_conversation(conversation_id, response.text.strip(), "user")
+        print("before add message")
+        asyncio.create_task(add_message_to_conversation(conversation_id, response.text.strip(), "assistant"))
 
         return response.text.strip()
     except Exception as e:
 
         #user_id = conversation_id  # Replace with actual user ID when possi'bl
-        add_message_to_conversation(conversation_id, "Failed to connect to Gemini API", "error")
+        asyncio.create_task(add_message_to_conversation(conversation_id, "Failed to connect to Gemini API", "error"))
         
         return f"Failed to connect to Gemini API: {e}"
 
@@ -97,13 +100,13 @@ def send_to_hugging_face(prompt: str, conversation_id: str, user_id: str):
         response = requests.post(url, headers=headers, json=data)
         response.raise_for_status()  # Raise an error for HTTP codes 4xx/5xx
         #user_id = conversation_id  # Replace with actual user ID when possi'bl
-        add_message_to_conversation(conversation_id, response.json()[0]["generated_text"].strip(), "user")
+        asyncio.create_task(add_message_to_conversation(conversation_id, response.json()[0]["generated_text"].strip(), "assistant"))
 
         return response.json()[0]["generated_text"].strip()
     except Exception as e:
 
         #user_id = conversation_id  # Replace with actual user ID when possi'bl
-        add_message_to_conversation(conversation_id, "Failed to connect to Hugging Face API", "error")
+        asyncio.create_task(add_message_to_conversation(conversation_id, "Failed to connect to Hugging Face API", "error"))
 
         return f"Failed to connect to Hugging Face API: {e}"
 
