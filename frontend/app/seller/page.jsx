@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useAppContext } from '@/context/AppContext';
 import axios from 'axios';
 import { toast } from 'react-hot-toast';
+import { set } from 'mongoose';
 const AddProduct = () => {
   const { getToken } = useAppContext();
   const [files, setFiles] = useState([]);
@@ -13,6 +14,8 @@ const AddProduct = () => {
   const [category, setCategory] = useState('Earphone');
   const [price, setPrice] = useState('');
   const [offerPrice, setOfferPrice] = useState('');
+  const [promptText, setPromptText] = useState('');
+  const [publicKey, setPublicKey] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,6 +27,8 @@ const AddProduct = () => {
     formData.append('category', category);
     formData.append('price', price);
     formData.append('offerPrice', offerPrice);
+    formData.append('promptText', promptText);
+    formData.append('publicKey', publicKey);
 
     for (let i = 0; i < files.length; i++) {
       formData.append('images', files[i]);
@@ -45,6 +50,8 @@ const AddProduct = () => {
         setCategory('Earphone');
         setPrice('');
         setOfferPrice('');
+        setPromptText('');
+        setPublicKey('');
       } else {
         toast.error(data.message);
       }
@@ -117,6 +124,37 @@ const AddProduct = () => {
             value={description}
             required
           ></textarea>
+        </div>
+        <div className="flex flex-col gap-1 max-w-md">
+          <label
+            className="text-base font-medium"
+            htmlFor="prompt-text"
+          >
+            Prompt Text
+          </label>
+          <textarea
+            id="prompt-text"
+            rows={4}
+            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40 resize-none"
+            placeholder="Type here"
+            onChange={(e) => setPromptText(e.target.value)}
+            value={promptText}
+            required
+          ></textarea>
+        </div>
+        <div className="flex flex-col gap-1 max-w-md">
+          <label className="text-base font-medium" htmlFor="publicKey">
+            Your Solana Wallet Address
+          </label>
+          <input
+            id="publicKey"
+            type="text"
+            placeholder="Type here"
+            className="outline-none md:py-2.5 py-2 px-3 rounded border border-gray-500/40"
+            onChange={(e) => setPublicKey(e.target.value)}
+            value={publicKey}
+            required
+          />
         </div>
         <div className="flex items-center gap-5 flex-wrap">
           <div className="flex flex-col gap-1 w-32">
