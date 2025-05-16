@@ -34,6 +34,14 @@ const productSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  promptText: {
+    type: String,
+    required: true,
+  },
+  publicKey: {
+    type: String,
+    required: true,
+  },
 });
 
 const Product =
