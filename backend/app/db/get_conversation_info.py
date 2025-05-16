@@ -49,19 +49,17 @@ async def get_conversation_info(user_id: str):
     conversation_collection = await connect_to_mongo()
     print("Connected to MongoDB")
     try:
-        conversation = await conversation_collection.find_one({"_id": ObjectId(user_id)})
-        if not conversation:
-            raise ValueError("Conversation not found")
+        cursor = conversation_collection.find({"user_id": user_id})
+        conversations = []
+        async for document in cursor:
+            conversations.append(document)
+            print(document)
+
+
+        if not conversations:
+            raise ValueError("No conversations found")
         
-        return Conversation(
-            id=str(conversation["_id"]),
-            user_id=conversation["user_id"],
-            chosen_model=conversation["chosen_model"],
-            chosen_prompts=conversation["chosen_prompts"],
-            conversation_title=conversation["conversation_title"],
-            parameters=conversation["parameters"],
-            messages=conversation["messages"],
-        )
+        return conversations
     except Exception as e:
         raise RuntimeError(f"Error while fetching conversation info: {e}")
     
