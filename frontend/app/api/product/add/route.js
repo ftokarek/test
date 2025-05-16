@@ -27,6 +27,8 @@ export async function POST(request) {
     const category = formData.get('category');
     const price = formData.get('price');
     const offerPrice = formData.get('offerPrice');
+    const promptText = formData.get('promptText');
+    const publicKey = formData.get('publicKey');
 
     const files = formData.getAll('images');
 
@@ -87,6 +89,8 @@ export async function POST(request) {
       offerPrice: Number(offerPrice),
       images: image,
       date: Date.now(),
+      promptText: promptText,
+      publicKey: publicKey,
     });
 
     return NextResponse.json({
