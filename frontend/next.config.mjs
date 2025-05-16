@@ -22,6 +22,14 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'node:async_hooks': false, // Ignoruj moduł async_hooks
+    };
+    return config;
+  },
 };
 
 export default nextConfig;
