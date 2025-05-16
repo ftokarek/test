@@ -97,26 +97,6 @@ const MyOrders = () => {
                       <span>Payment : Pending</span>
                     </p>
                   </div>
-                  <button
-                    onClick={() => {
-                      console.log("order:", order)
-                      console.log("amount: ", order.amount)
-                      console.log("seller_id: ", order.items[0].product.userId)
-                      console.log("user_id: ", user.id)
-                      console.log("product_id: ", order.items[0].product._id)
-                      handlePurchaseWithFee(
-                      order.amount,  
-                      order.items[0].product.userId, 
-                      user.id, 
-                      order.items[0].product.id,
-                      order.items[0].product.name
-                      )
-                    }
-                    }
-                    className="bg-violet-500 text-white px-4 py-2 rounded-md"
-                  >
-                    Pay
-                  </button>
                 </div>
               ))}
             </div>
