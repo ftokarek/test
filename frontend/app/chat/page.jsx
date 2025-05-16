@@ -22,7 +22,7 @@ const Chat = () => {
   const [currentChat, setCurrentChat] = useState(null);
   useEffect(() => {
     // Pobierz rozmowy użytkownika po załadowaniu komponentu
-    //fetchUserConversations();
+    fetchUserConversations();
   }, []);
   useEffect(() => {
     // Przewijanie do najnowszej wiadomości
