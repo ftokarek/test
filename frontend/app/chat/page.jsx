@@ -53,7 +53,17 @@ const Chat = () => {
 
   const fetchUserConversations = async () => {
     try {
-      const token = await getToken(); // Pobierz token użytkownika
+      if (!user) {
+        console.error('User is not logged in or user data is not loaded.');
+        return;
+      }
+
+      const token = await getToken();
+      if (!token) {
+        console.error('Failed to retrieve token. User might not be authenticated.');
+        return;
+      }
+
       const response = await fetch(`http://localhost:8000/conversations/${user.id}`, {
         method: 'GET',
         headers: {
@@ -62,14 +72,18 @@ const Chat = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Err.');
+        throw new Error(`Failed to fetch conversations. Status: ${response.status}`);
       }
 
       const data = await response.json();
+      if (!data || data.length === 0) {
+        console.warn('No conversations found for the user.');
+      }
+
       setChats(data);
-    }
-    catch (err) {
-      console.error('Err:', err.message);
+      console.log('Conversations fetched successfully:', data);
+    } catch (err) {
+      console.error('Error fetching conversations:', err.message);
     }
   }
 
@@ -140,10 +154,8 @@ const handleSendMessage = async () => {
   setIsLoading(true);
 
   try {
-    // Pobierz token użytkownika
     const token = await getToken();
 
-    // Wyślij wiadomość do backendu
     const response = await fetch(`http://localhost:8000/prompt-request`, {
       method: 'POST',
       headers: {
@@ -188,7 +200,7 @@ const handleSendMessage = async () => {
       {/* Główny kontener czatu */}
       <div className="flex-1 flex overflow-hidden pt-16">
         {/* Lewy panel - lista czatów */}
-        <div className="w-64 bg-[#121212] border-r border-gray-800 flex flex-col h-full hidden md:flex">
+        <div className="w-64 bg-[#121212] border-r border-gray-800 flex flex-col h-full md:flex"> {/* Usunięto `hidden` */}
           <div className="p-4">
             <button
               onClick={handleNewChat}
@@ -247,7 +259,7 @@ const handleSendMessage = async () => {
           <div className="flex-1 overflow-y-auto p-4 space-y-6">
             {messages.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center text-white">
-                <h1 className="text-3xl font-bold mb-2 font-bold text-violet-300 tracking-wider">NeuroSphere Chat</h1>
+                <h1 className="text-3xl font-bold mb-2 text-violet-300 tracking-wider">NeuroSphere Chat</h1>
                 <p className="text-gray-400 max-w-md">
                   Rozpocznij rozmowę z naszym modelem AI
                 </p>

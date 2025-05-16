@@ -32,7 +32,7 @@ async def create_conversation(conv_data: dict):
 async def get_conversation(user_id: str):
     got_conversations = await get_conversation_info(user_id)
     if not got_conversations:
-        raise HTTPException(status_code=404, detail="Seller not found")
+        raise HTTPException(status_code=404, detail="Conversation not found")
     return got_conversations
     
 

@@ -27,14 +27,16 @@ const Navbar = () => {
         <Link href="/chat" className="hover:text-blue-300 transition">
           Chat AI
         </Link>
-        {/* TODO: Add about us page */}
+
+        {/*}
+        {/* TODO: Add about us page }
         <Link href="/" className="hover:text-blue-300 transition">
           About Us
         </Link>
-        {/* TODO: Add contact page */}
+        {/* TODO: Add contact page }
         <Link href="/" className="hover:text-blue-300 transition">
           Contact
-        </Link>
+        </Link>*/} 
 
         {isSeller && (
           <button
