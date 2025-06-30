@@ -11,8 +11,8 @@ const Banner = () => {
             Revolutionize How AI Creates Value
           </h2>
           <p className="text-gray-500 mt-2">
-            Our Solana-based platform enables transparent management, trading,
-            and monetization of advanced AI prompts and models. This allows for
+            Our Solana-based platform enables transparent management, trading
+            and monetization of advanced AI prompts. This allows for
             the creation and utilization of personalized, effective solutions
             for businesses and individual users.
           </p>
@@ -23,7 +23,7 @@ const Banner = () => {
           <MeteorsDemo
             title={'Transparent Marketplace'}
             description={
-              'Monetize your prompts and models, while the blockchain system ensures transparency for all transactions.'
+              'Monetize your prompts, while the blockchain system ensures transparency for all transactions.'
             }
             icon={'📊 '}
           />

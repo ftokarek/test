@@ -21,7 +21,7 @@ const AILandingPage = () => {
             <br />
             AI models and engineered prompts.
             <br />
-            Deploy faster, trade smarter, and
+            Work faster, trade smarter, and
             <br />
             integrate intelligence at scale.
           </p>
