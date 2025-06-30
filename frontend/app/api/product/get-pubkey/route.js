@@ -1,11 +1,9 @@
 import connectDB from "@/config/db";
-import Product from "@/models/Product"; // Upewnij się, że ścieżka jest poprawna
+import Product from "@/models/Product";
 import { Types } from "mongoose";
 import { NextResponse } from 'next/server';
 
-
-
-export async function POST(req) {
+export async function GET(req) {
   try {
     const { product_id } = await req.json();
     const publicKey = await getProductPublicKey(product_id);
@@ -16,8 +14,8 @@ export async function POST(req) {
   }
 }
 
-
-export async function getProductPublicKey(product_id) {
+// Funkcja pomocnicza, nie eksportujemy jej!
+async function getProductPublicKey(product_id) {
   await connectDB();
 
   if (!Types.ObjectId.isValid(product_id)) {
