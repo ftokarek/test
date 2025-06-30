@@ -3,7 +3,7 @@ import { MeteorsDemo } from './meteors-component';
 import { Button } from './ui/button';
 const Banner = () => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 py-20">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20">
       <div className="flex flex-col items-start justify-center gap-6">
         <div className="space-y-3">
           <p className="text-violet-300 font-medium">BLOCKCHAIN + AI</p>
@@ -17,7 +17,6 @@ const Banner = () => {
             for businesses and individual users.
           </p>
         </div>
-        <Button>Learn More</Button>
       </div>
       <div className="h-full md:min-h-[400px] rounded-xl flex items-center justify-center p-8">
         <div className="grid grid-cols-1 gap-10 text-white">
@@ -31,14 +30,14 @@ const Banner = () => {
           <MeteorsDemo
             title={'Trading & Speculation'}
             description={
-              'Invest in promising AI models and profit as their value increases with popularity.'
+              'Invest in promising AI prompts and profit as their value increases with popularity.'
             }
             icon={'🔄 '}
           />
           <MeteorsDemo
             title={'Customizable Solutions'}
             description={
-              'Adapt existing prompts and models to your business needs with a single click.'
+              'Adapt existing prompts to your business needs with a single click.'
             }
             icon={'🔧 '}
           />

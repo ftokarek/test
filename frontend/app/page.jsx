@@ -13,16 +13,11 @@ const Home = () => {
     <Layout>
       <AILandingPage />
       <div className="px-6 md:px-16 lg:px-32 py-8 " id="second-section">
-        <FeaturedProduct />
-        <div className="py-8">
-          <HomeProducts />
-        </div>
+        
         <div className="py-20">
           <Banner />
         </div>
-        <div className="py-20 pb-32">
-          <NewsLetter />
-        </div>
+        
       </div>
     </Layout>
   );
